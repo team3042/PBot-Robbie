@@ -11,13 +11,13 @@ public class FileIO {
 	
 	PrintStream writer;
 
-	/** openFile **************************************************************
+	/** open ******************************************************************
 	 * Create a new file. If the file already exists it will get over-written.
 	 * 
 	 * String path 		the directory path; should include the trailing "/"
 	 * String filename 	the name of the file to be created
 	 **************************************************************************/
-	public void openFile(String path, String filename) {
+	public void create(String path, String filename) {
 		File dir = new File(path);
 		String url = path + filename;
 		File file = new File(url);
@@ -33,20 +33,20 @@ public class FileIO {
 		}
 	}
 
-	/** writeToFile ***********************************************************
+	/** write *****************************************************************
 	 * Write a line of text to the file. Each call creates a new line.
 	 * 
 	 * String content 	Contains the text to be appended
 	 **************************************************************************/
-	public void writeToFile(String content) {
+	public void write(String content) {
 		writer.println(content);
 		writer.flush();
 	}
 
-	/** closeFile *************************************************************
+	/** close *****************************************************************
 	 * Close the text file.
 	 **************************************************************************/
-	public void closeFile() {
+	public void close() {
 		writer.close();
 	}
 }

@@ -19,7 +19,9 @@ import org.usfirst.frc.team3042.robot.subsystems.ExampleSubsystem;
  * directory.
  */
 public class Robot extends IterativeRobot {
-
+	Logger log = new Logger(RobotMap.LOG_TO_CONSOLE, RobotMap.LOG_TO_FILE, 
+			RobotMap.LOG_LEVEL_GLOBAL, RobotMap.LOG_LEVEL_ROBOT, "Robot");
+	
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	public static OI oi;
 
@@ -30,7 +32,6 @@ public class Robot extends IterativeRobot {
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
-	@Override
 	public void robotInit() {
 		oi = new OI();
 		chooser.addDefault("Default Auto", new ExampleCommand());
@@ -43,12 +44,10 @@ public class Robot extends IterativeRobot {
 	 * You can use it to reset any subsystem information you want to clear when
 	 * the robot is disabled.
 	 */
-	@Override
 	public void disabledInit() {
 
 	}
 
-	@Override
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
 	}
@@ -64,7 +63,6 @@ public class Robot extends IterativeRobot {
 	 * chooser code above (like the commented example) or additional comparisons
 	 * to the switch structure below with additional strings & commands.
 	 */
-	@Override
 	public void autonomousInit() {
 		autonomousCommand = chooser.getSelected();
 
@@ -83,12 +81,10 @@ public class Robot extends IterativeRobot {
 	/**
 	 * This function is called periodically during autonomous
 	 */
-	@Override
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
 	}
 
-	@Override
 	public void teleopInit() {
 		// This makes sure that the autonomous stops running when
 		// teleop starts running. If you want the autonomous to
@@ -101,7 +97,6 @@ public class Robot extends IterativeRobot {
 	/**
 	 * This function is called periodically during operator control
 	 */
-	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 	}
@@ -109,7 +104,6 @@ public class Robot extends IterativeRobot {
 	/**
 	 * This function is called periodically during test mode
 	 */
-	@Override
 	public void testPeriodic() {
 		LiveWindow.run();
 	}
