@@ -16,21 +16,28 @@ import java.util.TimeZone;
  * level, as well as less than or equal to the global level, will be 
  * entered.
  */
-public class Logger {
-	static public int OFF = 0;
-	static public int WARNING = 1;
-	static public int TRACE = 2;
-	static public int DEBUG = 3;
-	static public int DEBUG_PERIODIC = 4;
-	static public int ALL = 5;
+public class Log {
 	
+	/** List of Logging Levels ************************************************/
+	public static enum Level {
+		OFF, ERROR, WARNING, TRACE, DEBUG, DEBUG_PERIODIC, ALL;
+		public boolean isLessThanOrEqualTo(Level b) {
+			return this.ordinal() <= b.ordinal();
+			}
+		public boolean isGreaterThan(Level b) {
+			return this.ordinal() > b.ordinal();
+			}
+	}
+	
+	/** Class Variables *******************************************************/
 	static private FileIO file = new FileIO();
 	static private boolean useConsole = false;
 	static private boolean useFile = false;
-	static private int globalLevel = 0;
+	static private Level globalLevel = Level.OFF;
 
-	int level; 		// logging level for the local instance
-	String caller;	// The class name for this instance
+	/** Instance Variables ****************************************************/
+	Level level; 		// logging level for the this instance
+	String caller;	// The calling class name for this instance
 
 	
 	/** Logger ****************************************************************
@@ -40,16 +47,16 @@ public class Logger {
 	 * 
 	 * boolean 	useConsole 	true if output should be directed to the console
 	 * boolean 	useFile 	true if output should be directed to the file
-	 * int 		globalLevel	the global logging level
-	 * int 		level		the local logging level
+	 * Level 	globalLevel	the global logging level
+	 * Level 	level		the local logging level
 	 * String	caller		the class name for the local instance
 	*/
-	public Logger(boolean useConsole, boolean useFile, int globalLevel, 
-			int level, String caller) {
+	public Log(boolean useConsole, boolean useFile, Level globalLevel, 
+			Level level, String caller) {
 		this(level, caller);
 		init(useConsole, useFile, globalLevel);
 	}
-	public Logger(int level, String caller) {
+	public Log(Level level, String caller) {
 		this.level = level;
 		this.caller = caller;
 	}
@@ -60,16 +67,16 @@ public class Logger {
 	 * 
 	 * boolean 	useConsole 	true if output should be directed to the console
 	 * boolean 	useFile 	true if output should be directed to the file
-	 * int		level		the global logging level
+	 * Level	level		the global logging level
 	*/
-	static private void init(boolean useConsole, boolean useFile, int level) {
+	private void init(boolean useConsole, boolean useFile, Level level) {
 		if (useFile) { 
 			String filename = formatDateTime(LOG_FILE_FORMAT);
 			file.create(LOG_DIRECTORY_PATH, filename);
 		}	
-		Logger.useConsole = useConsole;
-		Logger.useFile = useFile;
-		Logger.globalLevel = level;
+		Log.useConsole = useConsole;
+		Log.useFile = useFile;
+		Log.globalLevel = level;
 	}
 	
 	
@@ -93,12 +100,14 @@ public class Logger {
 	 * class.
 	 * 
 	 * String 	message	the contents of the log entry
-	 * int 		level	the logging level of the entry
+	 * Level	level	the logging level of the entry
 	*/
-	public void add(String message, int level) {			
-		if ( (level <= globalLevel) && (level <= this.level) && (level > 0)) {
-			String time = formatDateTime(LOG_TIME_FORMAT);			
-							
+	public void add(String message, Level level) {			
+		if ( level.isLessThanOrEqualTo(globalLevel)
+				&& level.isLessThanOrEqualTo(this.level) 
+				&& (level.isGreaterThan(Level.OFF))) {
+			
+			String time = formatDateTime(LOG_TIME_FORMAT);							
 			message = time + "\t" + "[" + caller + "] " + message;
 				
 			if (useFile) file.write(message);

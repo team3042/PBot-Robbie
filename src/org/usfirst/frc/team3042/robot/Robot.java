@@ -1,11 +1,9 @@
 
 package org.usfirst.frc.team3042.robot;
 
-import static org.usfirst.frc.team3042.robot.Logger.*;
-import static org.usfirst.frc.team3042.robot.RobotMap.*;
-
 import org.usfirst.frc.team3042.robot.commands.ExampleCommand;
 import org.usfirst.frc.team3042.robot.subsystems.ExampleSubsystem;
+import org.usfirst.frc.team3042.robot.subsystems.PanTilt;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -23,9 +21,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * directory.
  */
 public class Robot extends IterativeRobot {
-	Logger log = new Logger(LOG_TO_CONSOLE, LOG_TO_FILE, LOG_LEVEL_GLOBAL, 
-			LOG_LEVEL_ROBOT, "Robot");
-	
+	Log log = new Log(RobotMap.LOG_TO_CONSOLE, RobotMap.LOG_TO_FILE, 
+			RobotMap.LOG_LEVEL_GLOBAL, RobotMap.LOG_LEVEL_ROBOT, "Robot");
+		
+	public static final PanTilt panTilt = new PanTilt.Build()
+			.panPort(RobotMap.PAN_PORT)
+			.tiltPort(RobotMap.TILT_PORT)
+			.PWMmax(RobotMap.SERVO_PWM_MAX)
+			.PWMmin(RobotMap.SERVO_PWM_MIN)
+			.logLevel(RobotMap.LOG_LEVEL_PAN_TILT)
+			.build();
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	public static OI oi;
 
@@ -38,7 +43,7 @@ public class Robot extends IterativeRobot {
 	 * used for any initialization code.
 	 */
 	public void robotInit() {
-		log.add("Robot Init", TRACE);
+		log.add("Robot Init", Log.Level.TRACE);
 		
 		oi = new OI();
 		chooser.addDefault("Default Auto", new ExampleCommand());
@@ -53,7 +58,7 @@ public class Robot extends IterativeRobot {
 	 * the robot is disabled.
 	 */
 	public void disabledInit() {
-		log.add("Disabled Init", TRACE);
+		log.add("Disabled Init", Log.Level.TRACE);
 	}
 
 	
@@ -69,7 +74,7 @@ public class Robot extends IterativeRobot {
 	 * Run once at the start of autonomous mode.
 	 */
 	public void autonomousInit() {
-		log.add("Autonomous Init", TRACE);
+		log.add("Autonomous Init", Log.Level.TRACE);
 		
 		autonomousCommand = chooser.getSelected();
 
@@ -91,7 +96,7 @@ public class Robot extends IterativeRobot {
 	 * This function is called when first entering teleop mode.
 	 */
 	public void teleopInit() {
-		log.add("Teleop Init", TRACE);
+		log.add("Teleop Init", Log.Level.TRACE);
 		
 		// This makes sure that the autonomous stops running when
 		// teleop starts running. If you want the autonomous to

@@ -1,6 +1,6 @@
 package org.usfirst.frc.team3042.robot;
 
-import static org.usfirst.frc.team3042.robot.Logger.*;
+import static org.usfirst.frc.team3042.robot.Log.*;
 import static org.usfirst.frc.team3042.robot.RobotMap.*;
 
 import org.usfirst.frc.team3042.robot.commands.ExampleCommand;
@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.buttons.Trigger;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-	Logger log = new Logger(LOG_LEVEL_OI, "OI");
+	Log log = new Log(LOG_LEVEL_OI, "OI");
 	
 	public Joystick gamepad = new Joystick(USB_GAMEPAD);
 
@@ -55,7 +55,7 @@ public class OI {
 	 * Assign commands to the buttons and triggers
 	 */
 	public OI() {
-		log.add("OI Constructor", TRACE);
+		log.add("OI Constructor", Log.Level.TRACE);
 		
 		gamepad_A.whenPressed(new ExampleCommand());
 		gamepad_B.toggleWhenPressed(new ExampleCommand());

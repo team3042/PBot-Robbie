@@ -2,26 +2,23 @@
 
 import edu.wpi.first.wpilibj.command.Command;
 
-import org.usfirst.frc.team3042.robot.Logger;
+import org.usfirst.frc.team3042.robot.Log;
 import org.usfirst.frc.team3042.robot.Robot;
-
-import static org.usfirst.frc.team3042.robot.Logger.*;
-import static org.usfirst.frc.team3042.robot.RobotMap.*;
-import static org.usfirst.frc.team3042.robot.RobotMap.Bot.*;
+import org.usfirst.frc.team3042.robot.RobotMap;
 
 
 /** ExampleCommand ************************************************************
  * A template for commands.
  */
 public class ExampleCommand extends Command {
-	Logger log = new Logger(LOG_LEVEL_EXAMPLE_COMMAND, "ExampleCommand");
+	Log log = new Log(RobotMap.LOG_LEVEL_EXAMPLE_COMMAND, "ExampleCommand");
 	
 	
 	/** ExampleCommand ********************************************************
 	 * Required subsystems will cancel commands when this command is run.
 	 */
 	public ExampleCommand() {
-		log.add("Constructor", TRACE);
+		log.add("Constructor", Log.Level.TRACE);
 		
 		requires(Robot.exampleSubsystem);
 	}
@@ -31,7 +28,7 @@ public class ExampleCommand extends Command {
 	 * Called just before this Command runs the first time
 	 */
 	protected void initialize() {
-		log.add("Initialize", TRACE);
+		log.add("Initialize", Log.Level.TRACE);
 	}
 
 	
@@ -54,7 +51,7 @@ public class ExampleCommand extends Command {
 	 * Called once after isFinished returns true
 	 */
 	protected void end() {
-		log.add("End", TRACE);
+		log.add("End", Log.Level.TRACE);
 	}
 
 	
@@ -63,6 +60,6 @@ public class ExampleCommand extends Command {
 	 * subsystems is scheduled to run
 	 */
 	protected void interrupted() {
-		log.add("Interrupted", TRACE);
+		log.add("Interrupted", Log.Level.TRACE);
 	}
 }
