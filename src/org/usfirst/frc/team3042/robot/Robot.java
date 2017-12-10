@@ -1,7 +1,7 @@
-
 package org.usfirst.frc.team3042.robot;
 
 import org.usfirst.frc.team3042.robot.commands.ExampleCommand;
+import org.usfirst.frc.team3042.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team3042.robot.subsystems.ExampleSubsystem;
 import org.usfirst.frc.team3042.robot.subsystems.PanTilt;
 
@@ -20,22 +20,22 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class Robot extends IterativeRobot {
-	Log log = new Log(RobotMap.LOG_TO_CONSOLE, RobotMap.LOG_TO_FILE, 
-			RobotMap.LOG_LEVEL_GLOBAL, RobotMap.LOG_LEVEL_ROBOT, "Robot");
-		
-	public static final PanTilt panTilt = new PanTilt.Build()
-			.panPort(RobotMap.PAN_PORT)
-			.tiltPort(RobotMap.TILT_PORT)
-			.PWMmax(RobotMap.SERVO_PWM_MAX)
-			.PWMmin(RobotMap.SERVO_PWM_MIN)
-			.logLevel(RobotMap.LOG_LEVEL_PAN_TILT)
-			.build();
+public class Robot extends IterativeRobot { 
+	/** Configuration Constants ***********************************************/
+	private static final Log.Level LOG_LEVEL = RobotMap.LOG_ROBOT;
+	private static final boolean IS_DRIVETRAIN = RobotMap.HAS_DRIVETRAIN;
+	private static final boolean IS_PAN_TILT = RobotMap.HAS_PAN_TILT;
+	
+	
+	/** Create Subsystems *****************************************************/
+	private Log log = new Log(LOG_LEVEL, "Robot");
+	public static final Drivetrain drivetrain = (IS_DRIVETRAIN) ? new Drivetrain() : null;
+	public static final PanTilt panTilt = (IS_PAN_TILT) ? new PanTilt() : null;
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	public static OI oi;
 
 	Command autonomousCommand;
-	SendableChooser<Command> chooser = new SendableChooser<>();
+	SendableChooser<Command> chooser = new SendableChooser<Command>();
 
 	
 	/** robotInit *************************************************************
@@ -47,8 +47,8 @@ public class Robot extends IterativeRobot {
 		
 		oi = new OI();
 		chooser.addDefault("Default Auto", new ExampleCommand());
-		// chooser.addObject("My Auto", new MyAutoCommand());
-		SmartDashboard.putData("Auto mode", chooser);
+		chooser.addObject("My Auto", new ExampleCommand());
+		SmartDashboard.putData("Auto Mode", chooser);
 	}
 
 	

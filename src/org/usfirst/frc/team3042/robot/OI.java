@@ -1,68 +1,98 @@
 package org.usfirst.frc.team3042.robot;
 
-import static org.usfirst.frc.team3042.robot.Log.*;
-import static org.usfirst.frc.team3042.robot.RobotMap.*;
-
-import org.usfirst.frc.team3042.robot.commands.ExampleCommand;
-import org.usfirst.frc.team3042.robot.triggers.AxisTrigger;
-import org.usfirst.frc.team3042.robot.triggers.POVButton;
-
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.buttons.Button;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.buttons.Trigger;
-
+import org.usfirst.frc.team3042.robot.commands.PanTiltSet;
 
 /** OI ************************************************************************
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
  */
-public class OI {
-	Log log = new Log(LOG_LEVEL_OI, "OI");
+public class OI {	
+	/** Configuration Constants ***********************************************/
+	private static final int USB_GAMEPAD = RobotMap.USB_GAMEPAD;
+	private static final int USB_JOY_LEFT = RobotMap.USB_JOYSTICK_LEFT;
+	private static final int USB_JOY_RIGHT = RobotMap.USB_JOYSTICK_RIGHT;
+	private static final boolean USE_JOYSTICKS = RobotMap.USE_JOYSTICKS;
+	private static final boolean HAS_PAN_TILT = RobotMap.HAS_PAN_TILT;
+	private static final double JOYSTICK_DRIVE_SCALE = RobotMap.JOYSTICK_DRIVE_SCALE;
+	private static final double JOYSTICK_DEAD_ZONE = RobotMap.JOYSTICK_DEAD_ZONE;
+	private static final int GAMEPAD_LEFT_Y_AXIS = Gamepad.LEFT_JOY_Y_AXIS;
+	private static final int GAMEPAD_RIGHT_Y_AXIS = Gamepad.RIGHT_JOY_Y_AXIS;
+	private static final int JOYSTICK_Y_AXIS = Gamepad.JOY_Y_AXIS;
 	
-	public Joystick gamepad = new Joystick(USB_GAMEPAD);
+	
+	/** Instance Variables ****************************************************/
+	Log log = new Log(RobotMap.LOG_OI, "OI");
+	Gamepad gamepad, joyLeft, joyRight;
+	int driveAxisLeft, driveAxisRight;
 
-	Button gamepad_A = new JoystickButton(gamepad, 1);
-	Button gamepad_B = new JoystickButton(gamepad, 2);
-	Button gamepad_X = new JoystickButton(gamepad, 3);
-	Button gamepad_Y = new JoystickButton(gamepad, 4);
-	Button gamepad_LB = new JoystickButton(gamepad, 5);
-	Button gamepad_RB = new JoystickButton(gamepad, 6);
-	Button gamepad_Back = new JoystickButton(gamepad, 7);
-	Button gamepad_Start = new JoystickButton(gamepad, 8);
-	Button gamepad_LeftJoy = new JoystickButton(gamepad, 9);
-	Button gamepad_RightJoy = new JoystickButton(gamepad, 10);
-
-	Trigger gamepad_LeftJoyLeft = new AxisTrigger(gamepad, 0, AxisTrigger.Direction.LEFT);
-	Trigger gamepad_LeftJoyRight = new AxisTrigger(gamepad, 0, AxisTrigger.Direction.RIGHT);
-	Trigger gamepad_LeftJoyUp = new AxisTrigger(gamepad, 1, AxisTrigger.Direction.UP);
-	Trigger gamepad_LeftJoyDown = new AxisTrigger(gamepad, 1, AxisTrigger.Direction.DOWN);
-	
-	Trigger gamepad_LT = new AxisTrigger(gamepad,2);
-	Trigger gamepad_RT = new AxisTrigger(gamepad,3);
-	
-	Trigger gamepad_RightJoyLeft = new AxisTrigger(gamepad, 4, AxisTrigger.Direction.LEFT);
-	Trigger gamepad_RightJoyRight = new AxisTrigger(gamepad, 4, AxisTrigger.Direction.RIGHT);
-	Trigger gamepad_RightJoyUp = new AxisTrigger(gamepad, 5, AxisTrigger.Direction.UP);
-	Trigger gamepad_RightJoyDown = new AxisTrigger(gamepad, 5, AxisTrigger.Direction.DOWN);
-	
-	Trigger gamepad_POVUp = new POVButton(gamepad, POVButton.UP);
-	Trigger gamepad_POVDown = new POVButton(gamepad, POVButton.DOWN);
-	Trigger gamepad_POVLeft = new POVButton(gamepad, POVButton.LEFT);
-	Trigger gamepad_POVRight = new POVButton(gamepad, POVButton.RIGHT);
 
 	/** OI ********************************************************************
 	 * Assign commands to the buttons and triggers
+	 * 
+	 * Example Commands:
+	 * gamepad.A.whenPressed(new ExampleCommand());
+	 * gamepad.B.toggleWhenPressed(new ExampleCommand());
+	 * gamepad.X.whileHeld(new ExampleCommand());
+	 * gamepad.Y.whenReleased(new ExampleCommand());
+	 * gamepad.LT.toggleWhenActive(new ExampleCommand());
+	 * gamepad.RT.whenActive(new ExampleCommand());
+	 * gamepad.POVUp.whileActive(new ExampleCommand());
 	 */
 	public OI() {
 		log.add("OI Constructor", Log.Level.TRACE);
 		
-		gamepad_A.whenPressed(new ExampleCommand());
-		gamepad_B.toggleWhenPressed(new ExampleCommand());
-		gamepad_X.whileHeld(new ExampleCommand());
-		gamepad_Y.whenReleased(new ExampleCommand());
-		gamepad_LT.toggleWhenActive(new ExampleCommand());
-		gamepad_RT.whenActive(new ExampleCommand());
-		gamepad_POVUp.whileActive(new ExampleCommand());
+		gamepad = new Gamepad(USB_GAMEPAD);
+		
+		/** Setup Driving Controls ********************************************/
+		if (USE_JOYSTICKS) {
+			joyLeft = new Gamepad(USB_JOY_LEFT);
+			joyRight = new Gamepad(USB_JOY_RIGHT);
+			driveAxisLeft = JOYSTICK_Y_AXIS;
+			driveAxisRight = JOYSTICK_Y_AXIS;
+		}
+		else {
+			joyLeft = gamepad;
+			joyRight = gamepad;
+			driveAxisLeft = GAMEPAD_LEFT_Y_AXIS;
+			driveAxisRight = GAMEPAD_RIGHT_Y_AXIS;
+		}
+
+		/** Test set positions of the Pan-Tilt servos *************************/
+		if (HAS_PAN_TILT) {
+			gamepad.A.whenPressed(new PanTiltSet(0.5, 0.5));
+			gamepad.B.whenPressed(new PanTiltSet(1.0, 1.0));
+			gamepad.X.whenPressed(new PanTiltSet(0.0, 0.0));
+		}
+	}
+	
+	
+	/** Access to the driving axes values *************************************
+	 * A negative has been added to make pushing forward positive.
+	 */
+	public double getDriveLeft() {
+		double joystickValue = joyLeft.getRawAxis(driveAxisLeft);
+		joystickValue = scaleJoystick(joystickValue);
+		return joystickValue;
+	}
+	public double getDriveRight() {
+		double joystickValue = joyRight.getRawAxis(driveAxisRight);
+		joystickValue = scaleJoystick(joystickValue);
+		return joystickValue;
+	}
+	private double scaleJoystick(double joystickValue) {
+		joystickValue = checkDeadZone(joystickValue);
+		joystickValue *= JOYSTICK_DRIVE_SCALE;
+		joystickValue *= -1.0;
+		return joystickValue;
+	}
+	private double checkDeadZone(double joystickValue) {
+		if (Math.abs(joystickValue) < JOYSTICK_DEAD_ZONE) joystickValue = 0.0;
+		return joystickValue;
+	}
+	
+	
+	/** Access the POV value **************************************************/
+	public int getPOV() {
+		return gamepad.getPOV();
 	}
 }

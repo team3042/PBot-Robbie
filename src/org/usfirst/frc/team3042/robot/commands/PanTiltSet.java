@@ -7,24 +7,28 @@ import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
 
 
-/** ExampleCommand ************************************************************
- * A template for commands.
+/** PanTiltSet ************************************************************
+ * Set the Pan-Tilt servos to a specific position.
  */
-public class ExampleCommand extends Command {
+public class PanTiltSet extends Command {
 	/** Configuration Constants ***********************************************/
-	private static final Log.Level LOG_LEVEL = RobotMap.LOG_EXAMPLE_COMMAND;
+	private static final Log.Level LOG_LEVEL = RobotMap.LOG_PAN_TILT_SET;
 	
 	
 	/** Instance Variables ****************************************************/
 	Log log = new Log(LOG_LEVEL, getName());
+	double panPosition, tiltPosition;
 	
-	/** ExampleCommand ********************************************************
+	
+	/** PanTiltSet ************************************************************
 	 * Required subsystems will cancel commands when this command is run.
 	 */
-	public ExampleCommand() {
+	public PanTiltSet(double panPosition, double tiltPosition) {
 		log.add("Constructor", Log.Level.TRACE);
+		requires(Robot.panTilt);
 		
-		requires(Robot.exampleSubsystem);
+		this.panPosition = panPosition;
+		this.tiltPosition = tiltPosition;
 	}
 
 	
@@ -33,6 +37,9 @@ public class ExampleCommand extends Command {
 	 */
 	protected void initialize() {
 		log.add("Initialize", Log.Level.TRACE);
+		
+		Robot.panTilt.setPan(panPosition);
+		Robot.panTilt.setTilt(tiltPosition);
 	}
 
 	
@@ -47,7 +54,7 @@ public class ExampleCommand extends Command {
 	 * Make this return true when this Command no longer needs to run execute()
 	 */
 	protected boolean isFinished() {
-		return false;
+		return true;
 	}
 
 	
