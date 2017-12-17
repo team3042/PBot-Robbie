@@ -3,7 +3,7 @@
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
-import org.usfirst.frc.team3042.robot.Log;
+import org.usfirst.frc.team3042.lib.Log;
 import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
 import org.usfirst.frc.team3042.robot.triggers.POVButton;
@@ -17,6 +17,8 @@ import org.usfirst.frc.team3042.robot.triggers.POVButton;
 public class PanTiltDrive extends Command {
 	/** Configuration Constants ***********************************************/
 	private static final Log.Level LOG_LEVEL = RobotMap.LOG_PAN_TILT_DRIVE;
+	private static final double PAN_CENTER = RobotMap.PAN_CENTER;
+	private static final double TILT_CENTER = RobotMap.TILT_CENTER;
 	private static final double SERVO_SPEED = RobotMap.SERVO_SPEED;
 	private static final boolean REVERSE_PAN = RobotMap.REVERSE_PAN;
 	private static final boolean REVERSE_TILT = RobotMap.REVERSE_TILT;
@@ -24,7 +26,7 @@ public class PanTiltDrive extends Command {
 	
 	/** Instance Variables ****************************************************/
 	Log log = new Log(LOG_LEVEL, getName());
-	double panPosition, tiltPosition, oldTime;
+	double panPosition, tiltPosition;
 	Timer timer = new Timer();
 	
 	
@@ -45,10 +47,9 @@ public class PanTiltDrive extends Command {
 
 		timer.start();
 		timer.reset();
-		oldTime = timer.get();
 	
-		panPosition = Robot.panTilt.getPan();
-		tiltPosition = Robot.panTilt.getTilt();
+		panPosition = PAN_CENTER;
+		tiltPosition = TILT_CENTER;
 	}
 
 	
@@ -56,19 +57,30 @@ public class PanTiltDrive extends Command {
 	 * Called repeatedly when this Command is scheduled to run
 	 */
 	protected void execute() {
-		double time = timer.get();
-		double dt = time-oldTime;
-		oldTime = time;
+		double dt = timer.get();
+		timer.reset();
 		
 		double delta = SERVO_SPEED * dt;
 		double panDelta = (REVERSE_PAN) ? -delta : delta;
 		double tiltDelta = (REVERSE_TILT) ? -delta : delta;
 		
 		int pov = Robot.oi.getPOV();
-		if (pov == POVButton.UP) tiltPosition -= tiltDelta;
-		if (pov == POVButton.DOWN) tiltPosition += tiltDelta;
-		if (pov == POVButton.LEFT) panPosition -= panDelta;
-		if (pov == POVButton.RIGHT) panPosition += panDelta;
+		if ( (pov == POVButton.UP) || (pov == POVButton.UP_LEFT) || 
+				(pov == POVButton.UP_RIGHT) ) {
+			tiltPosition -= tiltDelta;
+		}
+		if ( (pov == POVButton.DOWN) || (pov == POVButton.DOWN_LEFT) || 
+				(pov == POVButton.DOWN_RIGHT) ) {
+			tiltPosition += tiltDelta;
+		}
+		if ( (pov == POVButton.LEFT) || (pov == POVButton.DOWN_LEFT) ||
+				(pov == POVButton.UP_LEFT) ) {
+			panPosition -= panDelta;
+		}
+		if ( (pov == POVButton.RIGHT) || (pov == POVButton.DOWN_RIGHT) ||
+				(pov == POVButton.UP_RIGHT) ) {
+			panPosition += panDelta;
+		}
 		
 		panPosition = safetyCheck(panPosition);
 		tiltPosition = safetyCheck(tiltPosition);

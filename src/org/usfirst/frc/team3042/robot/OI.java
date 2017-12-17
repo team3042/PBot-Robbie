@@ -1,6 +1,6 @@
 package org.usfirst.frc.team3042.robot;
 
-import org.usfirst.frc.team3042.robot.commands.PanTiltSet;
+import org.usfirst.frc.team3042.lib.Log;
 
 /** OI ************************************************************************
  * This class is the glue that binds the controls on the physical operator
@@ -12,7 +12,6 @@ public class OI {
 	private static final int USB_JOY_LEFT = RobotMap.USB_JOYSTICK_LEFT;
 	private static final int USB_JOY_RIGHT = RobotMap.USB_JOYSTICK_RIGHT;
 	private static final boolean USE_JOYSTICKS = RobotMap.USE_JOYSTICKS;
-	private static final boolean HAS_PAN_TILT = RobotMap.HAS_PAN_TILT;
 	private static final double JOYSTICK_DRIVE_SCALE = RobotMap.JOYSTICK_DRIVE_SCALE;
 	private static final double JOYSTICK_DEAD_ZONE = RobotMap.JOYSTICK_DEAD_ZONE;
 	private static final int GAMEPAD_LEFT_Y_AXIS = Gamepad.LEFT_JOY_Y_AXIS;
@@ -55,13 +54,6 @@ public class OI {
 			joyRight = gamepad;
 			driveAxisLeft = GAMEPAD_LEFT_Y_AXIS;
 			driveAxisRight = GAMEPAD_RIGHT_Y_AXIS;
-		}
-
-		/** Test set positions of the Pan-Tilt servos *************************/
-		if (HAS_PAN_TILT) {
-			gamepad.A.whenPressed(new PanTiltSet(0.5, 0.5));
-			gamepad.B.whenPressed(new PanTiltSet(1.0, 1.0));
-			gamepad.X.whenPressed(new PanTiltSet(0.0, 0.0));
 		}
 	}
 	

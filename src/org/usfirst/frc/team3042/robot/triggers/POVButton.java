@@ -1,6 +1,6 @@
 package org.usfirst.frc.team3042.robot.triggers;
 
-import org.usfirst.frc.team3042.robot.Log;
+import org.usfirst.frc.team3042.lib.Log;
 import org.usfirst.frc.team3042.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.Joystick;

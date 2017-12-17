@@ -1,6 +1,6 @@
 package org.usfirst.frc.team3042.robot.subsystems;
 
-import org.usfirst.frc.team3042.robot.Log;
+import org.usfirst.frc.team3042.lib.Log;
 import org.usfirst.frc.team3042.robot.RobotMap;
 
 import com.ctre.CANTalon;
@@ -31,11 +31,12 @@ public class Drivetrain_Followers extends Subsystem {
 	public Drivetrain_Followers() {
 		log.add("Constructor", Log.Level.TRACE);
 		
-		leftFollower.changeControlMode(TalonControlMode.Follower);
-		rightFollower.changeControlMode(TalonControlMode.Follower);
-
-		leftFollower.set(CAN_LEFT_MOTOR);
-		rightFollower.set(CAN_RIGHT_MOTOR);
+		initMotor(leftFollower, CAN_LEFT_MOTOR);
+		initMotor(rightFollower, CAN_RIGHT_MOTOR);
+	}
+	private void initMotor(CANTalon motor, int leaderCANid) {
+		motor.changeControlMode(TalonControlMode.Follower);
+		motor.set(leaderCANid);
 	}
 	
 	

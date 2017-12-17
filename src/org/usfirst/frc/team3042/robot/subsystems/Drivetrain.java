@@ -1,6 +1,6 @@
 package org.usfirst.frc.team3042.robot.subsystems;
 
-import org.usfirst.frc.team3042.robot.Log;
+import org.usfirst.frc.team3042.lib.Log;
 import org.usfirst.frc.team3042.robot.RobotMap;
 import org.usfirst.frc.team3042.robot.commands.Drivetrain_TankDrive;
 
@@ -20,6 +20,7 @@ public class Drivetrain extends Subsystem {
 	private static final int CAN_RIGHT_MOTOR = RobotMap.CAN_RIGHT_MOTOR;
 	private static final boolean HAS_FOLLOWERS = RobotMap.HAS_FOLLOWERS;
 	private static final boolean HAS_ENCODERS = RobotMap.HAS_ENCODERS;
+	private static final boolean HAS_AUTON = RobotMap.HAS_AUTON;
 	private static final boolean BRAKE_MODE = RobotMap.DRIVETRAIN_BRAKE_MODE;
 	private static final boolean REVERSE_LEFT_MOTOR = RobotMap.REVERSE_LEFT_MOTOR;
 	private static final boolean REVERSE_RIGHT_MOTOR = RobotMap.REVERSE_RIGHT_MOTOR;
@@ -31,9 +32,11 @@ public class Drivetrain extends Subsystem {
 	CANTalon rightMotor = new CANTalon(CAN_RIGHT_MOTOR);
 	Drivetrain_Followers followers;
 	public Drivetrain_Encoders encoders;
+	public Drivetrain_Auton auton;
 	{
 		if (HAS_FOLLOWERS) followers = new Drivetrain_Followers();
 		if (HAS_ENCODERS) encoders = new Drivetrain_Encoders(leftMotor, rightMotor);
+		if (HAS_AUTON) auton = new Drivetrain_Auton(leftMotor, rightMotor, encoders);
 	}
 
 	
@@ -42,18 +45,14 @@ public class Drivetrain extends Subsystem {
 	 */
 	public Drivetrain() {
 		log.add("Constructor", LOG_LEVEL);	
-			
-		/** Set Brake Mode **/
-		leftMotor.enableBrakeMode(BRAKE_MODE);
-		rightMotor.enableBrakeMode(BRAKE_MODE);
 		
-		/** Set the direction of positive values for percent Vbus mode **/
-		leftMotor.setInverted(REVERSE_LEFT_MOTOR);
-		rightMotor.setInverted(REVERSE_RIGHT_MOTOR);
-
-		/** Set the direction of positive values for closed-loop mode **/
-		leftMotor.reverseOutput(REVERSE_LEFT_MOTOR);
-		rightMotor.reverseOutput(REVERSE_RIGHT_MOTOR);
+		initMotor(leftMotor, REVERSE_LEFT_MOTOR);
+		initMotor(rightMotor, REVERSE_RIGHT_MOTOR);
+	}
+	private void initMotor(CANTalon motor, boolean reverse) {
+		motor.enableBrakeMode(BRAKE_MODE);
+		motor.setInverted(reverse); 	// affects percent Vbus mode
+		motor.reverseOutput(reverse); 	// affects closed-loop mode
 	}
 	
 	

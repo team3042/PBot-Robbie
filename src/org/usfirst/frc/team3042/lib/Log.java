@@ -1,8 +1,10 @@
-package org.usfirst.frc.team3042.robot;
+package org.usfirst.frc.team3042.lib;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+
+import org.usfirst.frc.team3042.robot.RobotMap;
 
 
 /** Logger ********************************************************************
@@ -91,6 +93,10 @@ public class Log {
 			if (USE_FILE) file.write(message);
 			if (USE_CONSOLE) System.out.println(message);
 		}
+	}
+	public void add(String label, double number, Level level) {
+		String message = label+" = "+number;
+		add(message, level);
 	}
 }
 

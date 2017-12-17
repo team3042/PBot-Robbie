@@ -21,11 +21,11 @@ public class Gamepad extends Joystick{
 	public static final int BUTTON_LEFT_JOY = 9;
 	public static final int BUTTON_RIGHT_JOY = 10;
 
-	public static final int LEFT_JOY_X = 0;
+	public static final int LEFT_JOY_X_AXIS = 0;
 	public static final int LEFT_JOY_Y_AXIS = 1;
 	public static final int LEFT_TRIGGER = 2;
 	public static final int RIGHT_TRIGGER = 3;
-	public static final int RIGHT_JOY_X = 4;
+	public static final int RIGHT_JOY_X_AXIS = 4;
 	public static final int RIGHT_JOY_Y_AXIS = 5;
 	
 	/** Axis Mapping for a single joystick ************************************/
@@ -47,16 +47,16 @@ public class Gamepad extends Joystick{
 	
 	
 	/** Trigger Declarations **************************************************/
-	Trigger LeftJoyLeft = new AxisTrigger(this, LEFT_JOY_X, AxisTrigger.Direction.LEFT);
-	Trigger LeftJoyRight = new AxisTrigger(this, LEFT_JOY_X, AxisTrigger.Direction.RIGHT);
+	Trigger LeftJoyLeft = new AxisTrigger(this, LEFT_JOY_X_AXIS, AxisTrigger.Direction.LEFT);
+	Trigger LeftJoyRight = new AxisTrigger(this, LEFT_JOY_X_AXIS, AxisTrigger.Direction.RIGHT);
 	Trigger LeftJoyUp = new AxisTrigger(this, LEFT_JOY_Y_AXIS, AxisTrigger.Direction.UP);
 	Trigger LeftJoyDown = new AxisTrigger(this, LEFT_JOY_Y_AXIS, AxisTrigger.Direction.DOWN);
 	
 	Trigger LT = new AxisTrigger(this, LEFT_TRIGGER);
 	Trigger RT = new AxisTrigger(this, RIGHT_TRIGGER);
 	
-	Trigger RightJoyLeft = new AxisTrigger(this, RIGHT_JOY_X, AxisTrigger.Direction.LEFT);
-	Trigger RightJoyRight = new AxisTrigger(this, RIGHT_JOY_X, AxisTrigger.Direction.RIGHT);
+	Trigger RightJoyLeft = new AxisTrigger(this, RIGHT_JOY_X_AXIS, AxisTrigger.Direction.LEFT);
+	Trigger RightJoyRight = new AxisTrigger(this, RIGHT_JOY_X_AXIS, AxisTrigger.Direction.RIGHT);
 	Trigger RightJoyUp = new AxisTrigger(this, RIGHT_JOY_Y_AXIS, AxisTrigger.Direction.UP);
 	Trigger RightJoyDown = new AxisTrigger(this, RIGHT_JOY_Y_AXIS, AxisTrigger.Direction.DOWN);
 	

@@ -1,6 +1,6 @@
 package org.usfirst.frc.team3042.robot.subsystems;
 
-import org.usfirst.frc.team3042.robot.Log;
+import org.usfirst.frc.team3042.lib.Log;
 import org.usfirst.frc.team3042.robot.RobotMap;
 import org.usfirst.frc.team3042.robot.commands.Drivetrain_Encoders_Dashboard;
 
@@ -24,28 +24,25 @@ public class Drivetrain_Encoders extends Subsystem {
 	
 	/** Instance Variables ****************************************************/
 	Log log = new Log(LOG_LEVEL, getName());
-	CANTalon left, right;
+	CANTalon leftMotor, rightMotor;
 	int leftZero, rightZero;
 	
 	
 	/** Drivetrain_Encoders ***************************************************/
 	public Drivetrain_Encoders(CANTalon leftMotor, CANTalon rightMotor) {
 		log.add("Constructor", LOG_LEVEL);
-		
-		left = leftMotor;
-		right= rightMotor;
-		
-		left.setFeedbackDevice(FeedbackDevice.QuadEncoder);
-		left.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, FRAME_RATE);
-		left.configEncoderCodesPerRev(COUNTS_PER_REVOLUTION);
-		left.reverseSensor(REVERSE_LEFT);
-		
-		right.setFeedbackDevice(FeedbackDevice.QuadEncoder);
-		right.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, FRAME_RATE);
-		right.configEncoderCodesPerRev(COUNTS_PER_REVOLUTION);
-		right.reverseSensor(REVERSE_RIGHT);
+						
+		this.leftMotor = initEncoder(leftMotor, REVERSE_LEFT);
+		this.rightMotor = initEncoder(rightMotor, REVERSE_RIGHT);
 		
 		reset();
+	}
+	private CANTalon initEncoder(CANTalon motor, boolean reverse) {
+		motor.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+		motor.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, FRAME_RATE);
+		motor.configEncoderCodesPerRev(COUNTS_PER_REVOLUTION);
+		motor.reverseSensor(reverse);
+		return motor;
 	}
 	
 	
@@ -59,8 +56,8 @@ public class Drivetrain_Encoders extends Subsystem {
 	
 	/** reset *****************************************************************/
 	public void reset() {
-		leftZero = left.getEncPosition();
-		rightZero = right.getEncPosition();
+		leftZero = leftMotor.getEncPosition();
+		rightZero = rightMotor.getEncPosition();
 	}
 	
 	
@@ -69,15 +66,15 @@ public class Drivetrain_Encoders extends Subsystem {
 	 * for speed.
 	 */
 	public int getLeft() {
-		return left.getEncPosition() - leftZero;
+		return leftMotor.getEncPosition() - leftZero;
 	}
 	public int getRight() {
-		return right.getEncPosition() - rightZero;
+		return rightMotor.getEncPosition() - rightZero;
 	}
 	public int getLeftSpeed() {
-		return left.getEncVelocity();
+		return leftMotor.getEncVelocity();
 	}
 	public int getRightSpeed() {
-		return right.getEncVelocity();
+		return rightMotor.getEncVelocity();
 	}
 }

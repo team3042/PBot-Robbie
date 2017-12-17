@@ -6,29 +6,29 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team3042.lib.Log;
 import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
-import org.usfirst.frc.team3042.robot.subsystems.Drivetrain_Encoders;
+import org.usfirst.frc.team3042.robot.subsystems.Gyroscope;
 
 
-/** Drivetrain_Encoders_Dashboard *********************************************
- * Output encoder values to the SmartDashboard
+/** Gyroscope_Dashboard ************************************************************
+ * Display the gyroscope angle on the dashboard
  */
-public class Drivetrain_Encoders_Dashboard extends Command {
+public class Gyroscope_Dashboard extends Command {
 	/** Configuration Constants ***********************************************/
-	private static final Log.Level LOG_LEVEL = RobotMap.LOG_DRIVETRAIN_ENC_DASH;
+	private static final Log.Level LOG_LEVEL = RobotMap.LOG_GYROSCOPE_DASHBOARD;
 	
 	
 	/** Instance Variables ****************************************************/
 	Log log = new Log(LOG_LEVEL, getName());
-	Drivetrain_Encoders encoders = Robot.drivetrain.encoders;
+	Gyroscope gyroscope = Robot.gyroscope;
 	
 	
-	/** Drivetrain_encoders_Dashboard *****************************************
+	/** Gyroscope_Dashboard ********************************************************
 	 * Required subsystems will cancel commands when this command is run.
 	 */
-	public Drivetrain_Encoders_Dashboard() {
+	public Gyroscope_Dashboard() {
 		log.add("Constructor", Log.Level.TRACE);
 		
-		requires(encoders);
+		requires(gyroscope);
 	}
 
 	
@@ -37,8 +37,6 @@ public class Drivetrain_Encoders_Dashboard extends Command {
 	 */
 	protected void initialize() {
 		log.add("Initialize", Log.Level.TRACE);
-		
-		encoders.reset();
 	}
 
 	
@@ -46,10 +44,7 @@ public class Drivetrain_Encoders_Dashboard extends Command {
 	 * Called repeatedly when this Command is scheduled to run
 	 */
 	protected void execute() {
-		SmartDashboard.putNumber("Left Encoder", encoders.getLeft());
-		SmartDashboard.putNumber("Right Encoder", encoders.getRight());
-		SmartDashboard.putNumber("Left Speed (c/100ms)", encoders.getLeftSpeed());
-		SmartDashboard.putNumber("Right Speed (c/100ms)", encoders.getRightSpeed());
+		SmartDashboard.putNumber("Gyroscope", gyroscope.getAngle());
 	}
 	
 	

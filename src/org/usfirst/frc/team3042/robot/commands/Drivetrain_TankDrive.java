@@ -3,7 +3,7 @@
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
-import org.usfirst.frc.team3042.robot.Log;
+import org.usfirst.frc.team3042.lib.Log;
 import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
 import org.usfirst.frc.team3042.robot.subsystems.Drivetrain;
@@ -21,7 +21,7 @@ public class Drivetrain_TankDrive extends Command {
 	/** Instance Variables ****************************************************/
 	Log log = new Log(LOG_LEVEL, getName());
 	Drivetrain drivetrain = Robot.drivetrain;
-	double leftPowerOld, rightPowerOld, timeOld;
+	double leftPowerOld, rightPowerOld;
 	Timer timer = new Timer();
 	
 	
@@ -48,7 +48,7 @@ public class Drivetrain_TankDrive extends Command {
 		rightPowerOld = 0.0;
 		
 		timer.start();
-		timeOld = timer.get();
+		timer.reset();
 	}
 
 	
@@ -59,8 +59,8 @@ public class Drivetrain_TankDrive extends Command {
 		double leftPower = Robot.oi.getDriveLeft();
 		double rightPower = Robot.oi.getDriveRight();
 		
-		double time = timer.get();
-		double dt = time - timeOld;
+		double dt = timer.get();
+		timer.reset();
 		leftPower = restrictAcceleration(leftPower, leftPowerOld, dt);
 		rightPower = restrictAcceleration(rightPower, rightPowerOld, dt);	
 		
@@ -68,7 +68,6 @@ public class Drivetrain_TankDrive extends Command {
 		
 		leftPowerOld = leftPower;
 		rightPowerOld = rightPower;
-		timeOld = time;
 	}
 	
 	

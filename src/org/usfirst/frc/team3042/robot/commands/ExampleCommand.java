@@ -2,7 +2,7 @@
 
 import edu.wpi.first.wpilibj.command.Command;
 
-import org.usfirst.frc.team3042.robot.Log;
+import org.usfirst.frc.team3042.lib.Log;
 import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
 
@@ -17,6 +17,7 @@ public class ExampleCommand extends Command {
 	
 	/** Instance Variables ****************************************************/
 	Log log = new Log(LOG_LEVEL, getName());
+	
 	
 	/** ExampleCommand ********************************************************
 	 * Required subsystems will cancel commands when this command is run.
