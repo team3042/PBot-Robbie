@@ -18,6 +18,10 @@ public class PanTilt extends Subsystem {
 	private static final int TILT_PORT = RobotMap.PWM_TILT_PORT;
 	private static final double PWM_MAX = RobotMap.SERVO_PWM_MAX;
 	private static final double PWM_MIN = RobotMap.SERVO_PWM_MIN;
+	private static final double PAN_MIN = RobotMap.PAN_MIN;
+	private static final double PAN_MAX = RobotMap.PAN_MAX;
+	private static final double TILT_MIN = RobotMap.TILT_MIN;
+	private static final double TILT_MAX = RobotMap.TILT_MAX;
 	
 	
 	/** Instance Variables ****************************************************/
@@ -49,17 +53,16 @@ public class PanTilt extends Subsystem {
 	/** Set the Pan and Tilt servo positions **********************************
 	 * Input value is a number from 0 to 1. 
 	 */
-	public void setPan(double position) {
-		position = safetyCheck(position);
+	public double setPan(double position) {
+		position = Math.min(PAN_MAX, position);
+		position = Math.max(PAN_MIN, position);
 		pan.set(position);
+		return position;
 	}
-	public void setTilt(double position) {
-		position = safetyCheck(position);
+	public double setTilt(double position) {
+		position = Math.min(TILT_MAX, position);
+		position = Math.max(TILT_MIN, position);
 		tilt.set(position);
-	}
-	private double safetyCheck(double position) {
-		position = Math.min(1.0, position);
-		position = Math.max(0.0, position);
 		return position;
 	}
 	

@@ -5,7 +5,9 @@ import org.usfirst.frc.team3042.robot.commands.ExampleCommand;
 import org.usfirst.frc.team3042.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team3042.robot.subsystems.ExampleSubsystem;
 import org.usfirst.frc.team3042.robot.subsystems.Gyroscope;
+import org.usfirst.frc.team3042.robot.subsystems.LightRing;
 import org.usfirst.frc.team3042.robot.subsystems.PanTilt;
+import org.usfirst.frc.team3042.robot.subsystems.Spinner;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -28,13 +30,17 @@ public class Robot extends IterativeRobot {
 	private static final boolean HAS_DRIVETRAIN = RobotMap.HAS_DRIVETRAIN;
 	private static final boolean HAS_PAN_TILT = RobotMap.HAS_PAN_TILT;
 	private static final boolean HAS_GYROSCOPE = RobotMap.HAS_GYROSCOPE;
+	private static final boolean HAS_LIGHT_RING = RobotMap.HAS_LIGHT_RING;
+	private static final boolean HAS_SPINNER = RobotMap.HAS_SPINNER;
 	
 	
 	/** Create Subsystems *****************************************************/
 	private Log log = new Log(LOG_LEVEL, "Robot");
-	public static final Drivetrain drivetrain = (HAS_DRIVETRAIN) ? new Drivetrain() : null;
-	public static final PanTilt panTilt = (HAS_PAN_TILT) ? new PanTilt() : null;
-	public static final Gyroscope gyroscope = (HAS_GYROSCOPE) ? new Gyroscope() : null;
+	public static final Drivetrain 	drivetrain 	= (HAS_DRIVETRAIN) 	? new Drivetrain() 	: null;
+	public static final PanTilt 	panTilt 	= (HAS_PAN_TILT) 	? new PanTilt() 	: null;
+	public static final Spinner 	spinner 	= (HAS_SPINNER) 	? new Spinner() 	: null;
+	public static final Gyroscope 	gyroscope 	= (HAS_GYROSCOPE) 	? new Gyroscope() 	: null;
+	public static final LightRing 	lightRing 	= (HAS_LIGHT_RING) 	? new LightRing() 	: null;
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	public static OI oi;
 

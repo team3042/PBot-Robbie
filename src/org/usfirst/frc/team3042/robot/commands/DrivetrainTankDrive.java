@@ -4,15 +4,16 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 import org.usfirst.frc.team3042.lib.Log;
+import org.usfirst.frc.team3042.robot.OI;
 import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
 import org.usfirst.frc.team3042.robot.subsystems.Drivetrain;
 
 
-/** Drivetrain_TankDrive ************************************************************
+/** DrivetrainTankDrive *******************************************************
  * Using joystick input to drive the robot.
  */
-public class Drivetrain_TankDrive extends Command {
+public class DrivetrainTankDrive extends Command {
 	/** Configuration Constants ***********************************************/
 	private static final Log.Level LOG_LEVEL = RobotMap.LOG_DRIVETRAIN_TANKDRIVE;
 	private static final double ACCELERATION_MAX = RobotMap.ACCELERATION_MAX;
@@ -21,14 +22,15 @@ public class Drivetrain_TankDrive extends Command {
 	/** Instance Variables ****************************************************/
 	Log log = new Log(LOG_LEVEL, getName());
 	Drivetrain drivetrain = Robot.drivetrain;
+	OI oi = Robot.oi;
 	double leftPowerOld, rightPowerOld;
 	Timer timer = new Timer();
 	
 	
-	/** Drivetrain_TankDrive ********************************************************
+	/** DrivetrainTankDrive ***************************************************
 	 * Required subsystems will cancel commands when this command is run.
 	 */
-	public Drivetrain_TankDrive() {
+	public DrivetrainTankDrive() {
 		log.add("Constructor", Log.Level.TRACE);
 		
 		requires(drivetrain);
@@ -40,10 +42,8 @@ public class Drivetrain_TankDrive extends Command {
 	 */
 	protected void initialize() {
 		log.add("Initialize", Log.Level.TRACE);
-		
-		drivetrain.setModePercentVbus();
-		
-		drivetrain.stop();
+				
+		drivetrain.setPower(0.0, 0.0);
 		leftPowerOld = 0.0;
 		rightPowerOld = 0.0;
 		
@@ -56,15 +56,15 @@ public class Drivetrain_TankDrive extends Command {
 	 * Called repeatedly when this Command is scheduled to run
 	 */
 	protected void execute() {
-		double leftPower = Robot.oi.getDriveLeft();
-		double rightPower = Robot.oi.getDriveRight();
+		double leftPower = oi.getDriveLeft();
+		double rightPower = oi.getDriveRight();
 		
 		double dt = timer.get();
 		timer.reset();
 		leftPower = restrictAcceleration(leftPower, leftPowerOld, dt);
 		rightPower = restrictAcceleration(rightPower, rightPowerOld, dt);	
 		
-		drivetrain.setMotors(leftPower, rightPower);
+		drivetrain.setPower(leftPower, rightPower);
 		
 		leftPowerOld = leftPower;
 		rightPowerOld = rightPower;
@@ -98,7 +98,7 @@ public class Drivetrain_TankDrive extends Command {
 	 */
 	protected void end() {
 		log.add("End", Log.Level.TRACE);
-		drivetrain.stop();
+		drivetrain.setPower(0.0, 0.0);
 	}
 
 	
@@ -108,6 +108,6 @@ public class Drivetrain_TankDrive extends Command {
 	 */
 	protected void interrupted() {
 		log.add("Interrupted", Log.Level.TRACE);
-		drivetrain.stop();
+		drivetrain.setPower(0.0, 0.0);
 	}
 }

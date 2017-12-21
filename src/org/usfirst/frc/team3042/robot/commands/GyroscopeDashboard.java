@@ -9,10 +9,10 @@ import org.usfirst.frc.team3042.robot.RobotMap;
 import org.usfirst.frc.team3042.robot.subsystems.Gyroscope;
 
 
-/** Gyroscope_Dashboard ************************************************************
+/** GyroscopeDashboard ********************************************************
  * Display the gyroscope angle on the dashboard
  */
-public class Gyroscope_Dashboard extends Command {
+public class GyroscopeDashboard extends Command {
 	/** Configuration Constants ***********************************************/
 	private static final Log.Level LOG_LEVEL = RobotMap.LOG_GYROSCOPE_DASHBOARD;
 	
@@ -22,10 +22,10 @@ public class Gyroscope_Dashboard extends Command {
 	Gyroscope gyroscope = Robot.gyroscope;
 	
 	
-	/** Gyroscope_Dashboard ********************************************************
+	/** GyroscopeDashboard ****************************************************
 	 * Required subsystems will cancel commands when this command is run.
 	 */
-	public Gyroscope_Dashboard() {
+	public GyroscopeDashboard() {
 		log.add("Constructor", Log.Level.TRACE);
 		
 		requires(gyroscope);
@@ -37,6 +37,7 @@ public class Gyroscope_Dashboard extends Command {
 	 */
 	protected void initialize() {
 		log.add("Initialize", Log.Level.TRACE);
+		gyroscope.reset();
 	}
 
 	
@@ -44,7 +45,7 @@ public class Gyroscope_Dashboard extends Command {
 	 * Called repeatedly when this Command is scheduled to run
 	 */
 	protected void execute() {
-		SmartDashboard.putNumber("Gyroscope", gyroscope.getAngle());
+		SmartDashboard.putNumber("Gyroscope (Degrees)", gyroscope.getAngle());
 	}
 	
 	

@@ -2,7 +2,7 @@ package org.usfirst.frc.team3042.robot.subsystems;
 
 import org.usfirst.frc.team3042.lib.Log;
 import org.usfirst.frc.team3042.robot.RobotMap;
-import org.usfirst.frc.team3042.robot.commands.Drivetrain_TankDrive;
+import org.usfirst.frc.team3042.robot.commands.DrivetrainTankDrive;
 
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
@@ -30,21 +30,23 @@ public class Drivetrain extends Subsystem {
 	Log log = new Log(LOG_LEVEL, getName());
 	CANTalon leftMotor = new CANTalon(CAN_LEFT_MOTOR);
 	CANTalon rightMotor = new CANTalon(CAN_RIGHT_MOTOR);
-	Drivetrain_Followers followers;
-	public Drivetrain_Encoders encoders;
-	public Drivetrain_Auton auton;
-	{
-		if (HAS_FOLLOWERS) followers = new Drivetrain_Followers();
-		if (HAS_ENCODERS) encoders = new Drivetrain_Encoders(leftMotor, rightMotor);
-		if (HAS_AUTON) auton = new Drivetrain_Auton(leftMotor, rightMotor, encoders);
-	}
+	DrivetrainFollowers followers;
+	DrivetrainEncoders encoders;
+	DrivetrainAuton auton;
 
 	
 	/** Drivetrain ************************************************************
 	 * Set up the talons for desired behavior.
 	 */
 	public Drivetrain() {
-		log.add("Constructor", LOG_LEVEL);	
+		log.add("Constructor", LOG_LEVEL);
+		
+		if (HAS_FOLLOWERS) followers = new DrivetrainFollowers();
+		if (HAS_ENCODERS) {
+			encoders = new DrivetrainEncoders(leftMotor, rightMotor);
+			
+			if (HAS_AUTON) auton = new DrivetrainAuton();
+		}
 		
 		initMotor(leftMotor, REVERSE_LEFT_MOTOR);
 		initMotor(rightMotor, REVERSE_RIGHT_MOTOR);
@@ -60,28 +62,30 @@ public class Drivetrain extends Subsystem {
 	 * Set the default command for the subsystem.
 	 */
 	public void initDefaultCommand() {
-		setDefaultCommand(new Drivetrain_TankDrive());
+		setDefaultCommand(new DrivetrainTankDrive());
 	}
 	
 	
 	/** Methods for setting the motors in Percent Vbus mode ********************/
-	public void setModePercentVbus() {
-		leftMotor.changeControlMode(TalonControlMode.PercentVbus);
-		rightMotor.changeControlMode(TalonControlMode.PercentVbus);
-	}
-	public void stop() {
-		setMotors(0.0, 0.0);
-	}
-	public void setMotors(double leftPower, double rightPower) {
+	public void setPower(double leftPower, double rightPower) {
 		leftPower = safetyCheck(leftPower);
 		rightPower = safetyCheck(rightPower);
 				
+		leftMotor.changeControlMode(TalonControlMode.PercentVbus);
+		rightMotor.changeControlMode(TalonControlMode.PercentVbus);
+
 		leftMotor.set(leftPower);
 		rightMotor.set(rightPower);		
 	}
-	private double safetyCheck(double motorPower) {
-		motorPower = Math.min(1.0, motorPower);
-		motorPower = Math.max(-1.0, motorPower);
-		return motorPower;
+	private double safetyCheck(double power) {
+		power = Math.min(1.0, power);
+		power = Math.max(-1.0, power);
+		return power;
+	}
+	
+	
+	/** Provide commands access to the encoders *******************************/
+	public DrivetrainEncoders getEncoders() {
+		return encoders;
 	}
 }

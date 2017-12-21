@@ -1,34 +1,29 @@
  package org.usfirst.frc.team3042.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team3042.lib.Log;
 import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
-import org.usfirst.frc.team3042.robot.subsystems.Drivetrain_Encoders;
+import org.usfirst.frc.team3042.robot.subsystems.LightRing;
 
 
-/** Drivetrain_Encoders_Dashboard *********************************************
- * Output encoder values to the SmartDashboard
- */
-public class Drivetrain_Encoders_Dashboard extends Command {
+/** LightRingOn ***************************************************************/
+public class LightRingOn extends Command {
 	/** Configuration Constants ***********************************************/
-	private static final Log.Level LOG_LEVEL = RobotMap.LOG_DRIVETRAIN_ENC_DASH;
+	private static final Log.Level LOG_LEVEL = RobotMap.LOG_LIGHT_RING_ON;
 	
 	
 	/** Instance Variables ****************************************************/
 	Log log = new Log(LOG_LEVEL, getName());
-	Drivetrain_Encoders encoders = Robot.drivetrain.encoders;
+	LightRing lightRing = Robot.lightRing;
 	
 	
-	/** Drivetrain_encoders_Dashboard *****************************************
-	 * Required subsystems will cancel commands when this command is run.
-	 */
-	public Drivetrain_Encoders_Dashboard() {
+	/** LightRingOn ***********************************************************/
+	public LightRingOn() {
 		log.add("Constructor", Log.Level.TRACE);
 		
-		requires(encoders);
+		requires(lightRing);
 	}
 
 	
@@ -38,7 +33,7 @@ public class Drivetrain_Encoders_Dashboard extends Command {
 	protected void initialize() {
 		log.add("Initialize", Log.Level.TRACE);
 		
-		encoders.reset();
+		lightRing.on();
 	}
 
 	
@@ -46,10 +41,6 @@ public class Drivetrain_Encoders_Dashboard extends Command {
 	 * Called repeatedly when this Command is scheduled to run
 	 */
 	protected void execute() {
-		SmartDashboard.putNumber("Left Encoder", encoders.getLeft());
-		SmartDashboard.putNumber("Right Encoder", encoders.getRight());
-		SmartDashboard.putNumber("Left Speed (c/100ms)", encoders.getLeftSpeed());
-		SmartDashboard.putNumber("Right Speed (c/100ms)", encoders.getRightSpeed());
 	}
 	
 	
@@ -66,6 +57,8 @@ public class Drivetrain_Encoders_Dashboard extends Command {
 	 */
 	protected void end() {
 		log.add("End", Log.Level.TRACE);
+		
+		lightRing.off();
 	}
 
 	
@@ -75,5 +68,7 @@ public class Drivetrain_Encoders_Dashboard extends Command {
 	 */
 	protected void interrupted() {
 		log.add("Interrupted", Log.Level.TRACE);
+		
+		lightRing.off();
 	}
 }

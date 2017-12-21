@@ -2,10 +2,13 @@
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team3042.lib.Log;
+import org.usfirst.frc.team3042.robot.OI;
 import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
+import org.usfirst.frc.team3042.robot.subsystems.PanTilt;
 import org.usfirst.frc.team3042.robot.triggers.POVButton;
 
 
@@ -28,6 +31,8 @@ public class PanTiltDrive extends Command {
 	Log log = new Log(LOG_LEVEL, getName());
 	double panPosition, tiltPosition;
 	Timer timer = new Timer();
+	PanTilt panTilt = Robot.panTilt;
+	OI oi = Robot.oi;
 	
 	
 	/** PanTiltDrive ************************************************************
@@ -35,7 +40,7 @@ public class PanTiltDrive extends Command {
 	 */
 	public PanTiltDrive() {
 		log.add("Constructor", Log.Level.TRACE);
-		requires(Robot.panTilt);
+		requires(panTilt);
 	}
 
 	
@@ -64,7 +69,7 @@ public class PanTiltDrive extends Command {
 		double panDelta = (REVERSE_PAN) ? -delta : delta;
 		double tiltDelta = (REVERSE_TILT) ? -delta : delta;
 		
-		int pov = Robot.oi.getPOV();
+		int pov = oi.getPOV();
 		if ( (pov == POVButton.UP) || (pov == POVButton.UP_LEFT) || 
 				(pov == POVButton.UP_RIGHT) ) {
 			tiltPosition -= tiltDelta;
@@ -82,21 +87,11 @@ public class PanTiltDrive extends Command {
 			panPosition += panDelta;
 		}
 		
-		panPosition = safetyCheck(panPosition);
-		tiltPosition = safetyCheck(tiltPosition);
+		panPosition = panTilt.setPan(panPosition);
+		tiltPosition = panTilt.setTilt(tiltPosition);
 		
-		Robot.panTilt.setPan(panPosition);
-		Robot.panTilt.setTilt(tiltPosition);
-	}
-	
-	
-	/** safetyCheck ***********************************************************
-	 * Make sure the pan and tilt position do not exceed bounds.
-	 */
-	private double safetyCheck(double position) {
-		position = Math.min(position,  1.0);
-		position = Math.max(position,  0.0);
-		return position;
+		SmartDashboard.putNumber("Pan Position", panPosition);
+		SmartDashboard.putNumber("Tilt Position", tiltPosition);
 	}
 	
 	

@@ -26,6 +26,7 @@ public class ExampleSubsystem extends Subsystem {
 		log.add("Constructor", LOG_LEVEL);
 	}
 	
+	
 	/** initDefaultCommand ****************************************************
 	 * Set the default command for the subsystem.
 	 */

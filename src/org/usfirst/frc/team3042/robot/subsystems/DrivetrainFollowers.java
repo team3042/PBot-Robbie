@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 /** DrivetrainFollowers **********************************************************
  * Motor controllers for secondary drivetrain motors
  */
-public class Drivetrain_Followers extends Subsystem {
+public class DrivetrainFollowers extends Subsystem {
 	/** Configuration Constants ***********************************************/
 	public static final Log.Level LOG_LEVEL = RobotMap.LOG_DRIVETRAIN_FOLLOWERS;
 	private static final int CAN_LEFT_MOTOR = RobotMap.CAN_LEFT_MOTOR;
@@ -28,7 +28,7 @@ public class Drivetrain_Followers extends Subsystem {
 	
 
 	/** DrivetrainFollowers **************************************************/
-	public Drivetrain_Followers() {
+	public DrivetrainFollowers() {
 		log.add("Constructor", Log.Level.TRACE);
 		
 		initMotor(leftFollower, CAN_LEFT_MOTOR);
