@@ -80,14 +80,14 @@ public class DrivetrainAuton extends Subsystem {
 	 * Clears out any old trajectories and prepares to receive new trajectory 
 	 * points.
 	 */
-	public void prepareMotionProfile() {		
-		prepareMotor(leftMotor);
-		prepareMotor(rightMotor);
+	public void initMotionProfile() {		
+		initMotor(leftMotor);
+		initMotor(rightMotor);
 		disableMotionProfile();
 		removeUnderrun();
 		encoders.reset();
 	}
-	private void prepareMotor(CANTalon motor) {
+	private void initMotor(CANTalon motor) {
 		motor.clearMotionProfileTrajectories();
 		motor.setProfile(PID_PROFILE);
 		motor.changeControlMode(TalonControlMode.MotionProfile);
@@ -100,16 +100,25 @@ public class DrivetrainAuton extends Subsystem {
 		leftMotor.pushMotionProfileTrajectory(leftPoint);
 		rightMotor.pushMotionProfileTrajectory(rightPoint);
 	}
-	public MotionProfileStatus[] getMotionProfileStatus() {
-		MotionProfileStatus[] motionProfileStatus = {new MotionProfileStatus(), 
-				new MotionProfileStatus()};
-		leftMotor.getMotionProfileStatus(motionProfileStatus[0]);
-		rightMotor.getMotionProfileStatus(motionProfileStatus[1]);
-		return motionProfileStatus;
+	public MotionProfileStatus getLeftStatus() {
+		MotionProfileStatus status = new MotionProfileStatus();
+		leftMotor.getMotionProfileStatus(status);
+		return status;
 	}
-	public void removeUnderrun() {
+	public MotionProfileStatus getRightStatus() {
+		MotionProfileStatus status = new MotionProfileStatus();
+		rightMotor.getMotionProfileStatus(status);
+		return status;
+	}
+	public void removeLeftUnderrun() {
 		leftMotor.clearMotionProfileHasUnderrun();
+	}
+	public void removeRightUnderrun() {
 		rightMotor.clearMotionProfileHasUnderrun();
+	}
+	private void removeUnderrun() {
+		removeLeftUnderrun();
+		removeRightUnderrun();
 	}
 	public void enableMotionProfile() {
 		leftMotor.set(CANTalon.SetValueMotionProfile.Enable.value);

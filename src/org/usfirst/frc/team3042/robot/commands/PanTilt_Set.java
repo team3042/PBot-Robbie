@@ -1,34 +1,37 @@
  package org.usfirst.frc.team3042.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team3042.lib.Log;
 import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
-import org.usfirst.frc.team3042.robot.subsystems.Gyroscope;
+import org.usfirst.frc.team3042.robot.subsystems.PanTilt;
 
 
-/** GyroscopeDashboard ********************************************************
- * Display the gyroscope angle on the dashboard
+/** PanTilt_Set ***********************************************************
+ * Set the Pan-Tilt servos to a specific position.
  */
-public class GyroscopeDashboard extends Command {
+public class PanTilt_Set extends Command {
 	/** Configuration Constants ***********************************************/
-	private static final Log.Level LOG_LEVEL = RobotMap.LOG_GYROSCOPE_DASHBOARD;
+	private static final Log.Level LOG_LEVEL = RobotMap.LOG_PAN_TILT;
 	
 	
 	/** Instance Variables ****************************************************/
 	Log log = new Log(LOG_LEVEL, getName());
-	Gyroscope gyroscope = Robot.gyroscope;
+	double panPosition, tiltPosition;
+	PanTilt panTilt = Robot.panTilt;
 	
 	
-	/** GyroscopeDashboard ****************************************************
+	/** PanTilt_Set ***********************************************************
 	 * Required subsystems will cancel commands when this command is run.
 	 */
-	public GyroscopeDashboard() {
+	public PanTilt_Set(double panPosition, double tiltPosition) {
 		log.add("Constructor", Log.Level.TRACE);
 		
-		requires(gyroscope);
+		requires(panTilt);
+		
+		this.panPosition = panPosition;
+		this.tiltPosition = tiltPosition;
 	}
 
 	
@@ -37,7 +40,9 @@ public class GyroscopeDashboard extends Command {
 	 */
 	protected void initialize() {
 		log.add("Initialize", Log.Level.TRACE);
-		gyroscope.reset();
+		
+		panTilt.setPan(panPosition);
+		panTilt.setTilt(tiltPosition);
 	}
 
 	
@@ -45,7 +50,6 @@ public class GyroscopeDashboard extends Command {
 	 * Called repeatedly when this Command is scheduled to run
 	 */
 	protected void execute() {
-		SmartDashboard.putNumber("Gyroscope (Degrees)", gyroscope.getAngle());
 	}
 	
 	
@@ -53,7 +57,7 @@ public class GyroscopeDashboard extends Command {
 	 * Make this return true when this Command no longer needs to run execute()
 	 */
 	protected boolean isFinished() {
-		return false;
+		return true;
 	}
 
 	

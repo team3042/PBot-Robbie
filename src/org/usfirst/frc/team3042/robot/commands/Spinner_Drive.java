@@ -3,31 +3,31 @@
 import edu.wpi.first.wpilibj.command.Command;
 
 import org.usfirst.frc.team3042.lib.Log;
+import org.usfirst.frc.team3042.robot.OI;
 import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
-import org.usfirst.frc.team3042.robot.subsystems.ExampleSubsystem;
+import org.usfirst.frc.team3042.robot.subsystems.Spinner;
 
 
-/** ExampleCommand ************************************************************
- * A template for commands.
- */
-public class ExampleCommand extends Command {
+/** Spinner_Drive *************************************************************/
+public class Spinner_Drive extends Command {
 	/** Configuration Constants ***********************************************/
-	private static final Log.Level LOG_LEVEL = RobotMap.LOG_EXAMPLE_SUBSYSTEM;
+	private static final Log.Level LOG_LEVEL = RobotMap.LOG_SPINNER;
 	
 	
 	/** Instance Variables ****************************************************/
 	Log log = new Log(LOG_LEVEL, getName());
-	ExampleSubsystem exampleSubsystem = Robot.exampleSubsystem;
+	Spinner spinner = Robot.spinner;
+	OI oi = Robot.oi;
 	
 	
-	/** ExampleCommand ********************************************************
+	/** Spinner_Drive ********************************************************
 	 * Required subsystems will cancel commands when this command is run.
 	 */
-	public ExampleCommand() {
+	public Spinner_Drive() {
 		log.add("Constructor", Log.Level.TRACE);
 		
-		requires(exampleSubsystem);
+		requires(spinner);
 	}
 
 	
@@ -36,6 +36,8 @@ public class ExampleCommand extends Command {
 	 */
 	protected void initialize() {
 		log.add("Initialize", Log.Level.TRACE);
+		
+		spinner.stop();
 	}
 
 	
@@ -43,6 +45,9 @@ public class ExampleCommand extends Command {
 	 * Called repeatedly when this Command is scheduled to run
 	 */
 	protected void execute() {
+		double power = oi.getTriggerDifference();
+		
+		spinner.setPower(power);
 	}
 	
 	
@@ -59,6 +64,7 @@ public class ExampleCommand extends Command {
 	 */
 	protected void end() {
 		log.add("End", Log.Level.TRACE);
+		terminate();
 	}
 
 	
@@ -68,5 +74,12 @@ public class ExampleCommand extends Command {
 	 */
 	protected void interrupted() {
 		log.add("Interrupted", Log.Level.TRACE);
+		terminate();
+	}
+	
+	
+	/** Graceful End **********************************************************/
+	private void terminate() {
+		spinner.stop();
 	}
 }

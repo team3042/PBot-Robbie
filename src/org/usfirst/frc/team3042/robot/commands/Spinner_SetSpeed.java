@@ -1,43 +1,54 @@
  package org.usfirst.frc.team3042.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team3042.lib.Log;
-import org.usfirst.frc.team3042.robot.OI;
 import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
 import org.usfirst.frc.team3042.robot.subsystems.Spinner;
 
 
-/** SpinnerDrive **************************************************************/
-public class SpinnerDrive extends Command {
+/** Spinner_SetSpeed **********************************************************/
+public class Spinner_SetSpeed extends Command {
 	/** Configuration Constants ***********************************************/
-	private static final Log.Level LOG_LEVEL = RobotMap.LOG_SPINNER_DRIVE;
+	private static final Log.Level LOG_LEVEL = RobotMap.LOG_SPINNER_CLOSED_LOOP;
+	private static final double DEFAULT_SPEED = RobotMap.SPINNER_DEFAULT_SPEED;
 	
 	
 	/** Instance Variables ****************************************************/
 	Log log = new Log(LOG_LEVEL, getName());
 	Spinner spinner = Robot.spinner;
-	OI oi = Robot.oi;
+	String speedLabel = "Spinner Speed";
+	boolean getFromDash = false;
+	double speed;
 	
 	
-	/** SpinnerDrive *********************************************************
+	/** Spinner_SetSpeed ******************************************************
 	 * Required subsystems will cancel commands when this command is run.
 	 */
-	public SpinnerDrive() {
+	public Spinner_SetSpeed(double speed) {
 		log.add("Constructor", Log.Level.TRACE);
-		
 		requires(spinner);
+		
+		this.speed = speed;
 	}
-
+	public Spinner_SetSpeed() {
+		this(DEFAULT_SPEED);
+		getFromDash = true;
+		SmartDashboard.putNumber(speedLabel, DEFAULT_SPEED);
+	}
 	
 	/** initialize ************************************************************
 	 * Called just before this Command runs the first time
 	 */
 	protected void initialize() {
 		log.add("Initialize", Log.Level.TRACE);
-		
-		spinner.setPower(0.0);
+
+		if (getFromDash) {
+			speed = SmartDashboard.getNumber(speedLabel, DEFAULT_SPEED);
+		}
+		spinner.closedLoop.setSpeed(speed);
 	}
 
 	
@@ -45,9 +56,6 @@ public class SpinnerDrive extends Command {
 	 * Called repeatedly when this Command is scheduled to run
 	 */
 	protected void execute() {
-		double power = oi.getTriggerDifference();
-		
-		spinner.setPower(power);
 	}
 	
 	
@@ -64,8 +72,7 @@ public class SpinnerDrive extends Command {
 	 */
 	protected void end() {
 		log.add("End", Log.Level.TRACE);
-		
-		spinner.setPower(0.0);
+		terminate();
 	}
 
 	
@@ -75,7 +82,12 @@ public class SpinnerDrive extends Command {
 	 */
 	protected void interrupted() {
 		log.add("Interrupted", Log.Level.TRACE);
-		
-		spinner.setPower(0.0);
+		terminate();
+	}
+	
+	
+	/** Graceful End **********************************************************/
+	private void terminate() {
+		spinner.stop();
 	}
 }

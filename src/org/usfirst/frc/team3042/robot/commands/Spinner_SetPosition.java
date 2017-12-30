@@ -1,33 +1,44 @@
  package org.usfirst.frc.team3042.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team3042.lib.Log;
 import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
-import org.usfirst.frc.team3042.robot.subsystems.ExampleSubsystem;
+import org.usfirst.frc.team3042.robot.subsystems.Spinner;
 
 
-/** ExampleCommand ************************************************************
- * A template for commands.
- */
-public class ExampleCommand extends Command {
+/** Spinner_SetPosition *******************************************************/
+public class Spinner_SetPosition extends Command {
 	/** Configuration Constants ***********************************************/
-	private static final Log.Level LOG_LEVEL = RobotMap.LOG_EXAMPLE_SUBSYSTEM;
+	private static final Log.Level LOG_LEVEL = RobotMap.LOG_SPINNER_CLOSED_LOOP;
+	private static final double DEFAULT_POSITION = RobotMap.SPINNER_DEFAULT_POSITION;
 	
 	
 	/** Instance Variables ****************************************************/
 	Log log = new Log(LOG_LEVEL, getName());
-	ExampleSubsystem exampleSubsystem = Robot.exampleSubsystem;
+	Spinner spinner = Robot.spinner;
+	String positionLabel = "Spinner Position";
+	boolean getFromDash = false;
+	double position;
 	
 	
-	/** ExampleCommand ********************************************************
+	/** Spinner_SetPosition ***************************************************
 	 * Required subsystems will cancel commands when this command is run.
+	 * 
+	 * Unit for position is revolutions, relative to the current zero position.
 	 */
-	public ExampleCommand() {
+	public Spinner_SetPosition(double position) {
 		log.add("Constructor", Log.Level.TRACE);
-		
-		requires(exampleSubsystem);
+		requires(spinner);
+
+		this.position = position;
+	}
+	public Spinner_SetPosition() {
+		this(DEFAULT_POSITION);
+		getFromDash = true;
+		SmartDashboard.putNumber(positionLabel, DEFAULT_POSITION);
 	}
 
 	
@@ -36,6 +47,12 @@ public class ExampleCommand extends Command {
 	 */
 	protected void initialize() {
 		log.add("Initialize", Log.Level.TRACE);
+		
+		if (getFromDash) {
+			position = SmartDashboard.getNumber(positionLabel, DEFAULT_POSITION);
+		}
+		
+		spinner.closedLoop.setPosition(position);
 	}
 
 	
@@ -59,6 +76,7 @@ public class ExampleCommand extends Command {
 	 */
 	protected void end() {
 		log.add("End", Log.Level.TRACE);
+		terminate();
 	}
 
 	
@@ -68,5 +86,12 @@ public class ExampleCommand extends Command {
 	 */
 	protected void interrupted() {
 		log.add("Interrupted", Log.Level.TRACE);
+		terminate();
+	}
+	
+	
+	/** Graceful End **********************************************************/
+	private void terminate() {
+		spinner.stop();
 	}
 }

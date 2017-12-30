@@ -2,7 +2,7 @@ package org.usfirst.frc.team3042.robot.subsystems;
 
 import org.usfirst.frc.team3042.lib.Log;
 import org.usfirst.frc.team3042.robot.RobotMap;
-import org.usfirst.frc.team3042.robot.commands.DrivetrainTankDrive;
+import org.usfirst.frc.team3042.robot.commands.Drivetrain_TankDrive;
 
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
@@ -62,7 +62,7 @@ public class Drivetrain extends Subsystem {
 	 * Set the default command for the subsystem.
 	 */
 	public void initDefaultCommand() {
-		setDefaultCommand(new DrivetrainTankDrive());
+		setDefaultCommand(new Drivetrain_TankDrive());
 	}
 	
 	
@@ -77,6 +77,9 @@ public class Drivetrain extends Subsystem {
 		leftMotor.set(leftPower);
 		rightMotor.set(rightPower);		
 	}
+	public void stop() {
+		setPower(0.0, 0.0);
+	}
 	private double safetyCheck(double power) {
 		power = Math.min(1.0, power);
 		power = Math.max(-1.0, power);
@@ -84,8 +87,11 @@ public class Drivetrain extends Subsystem {
 	}
 	
 	
-	/** Provide commands access to the encoders *******************************/
+	/** Provide commands access to the encoders and autonomous ****************/
 	public DrivetrainEncoders getEncoders() {
 		return encoders;
+	}
+	public DrivetrainAuton getAuton() {
+		return auton;
 	}
 }

@@ -1,7 +1,10 @@
 package org.usfirst.frc.team3042.robot;
 
 import org.usfirst.frc.team3042.lib.Log;
-import org.usfirst.frc.team3042.robot.commands.LightRingOn;
+import org.usfirst.frc.team3042.robot.commands.LightRing_On;
+import org.usfirst.frc.team3042.robot.commands.Spinner_Calibrate;
+import org.usfirst.frc.team3042.robot.commands.Spinner_SetPosition;
+import org.usfirst.frc.team3042.robot.commands.Spinner_SetSpeed;
 
 /** OI ************************************************************************
  * This class is the glue that binds the controls on the physical operator
@@ -17,6 +20,7 @@ public class OI {
 	private static final double JOYSTICK_DEAD_ZONE = RobotMap.JOYSTICK_DEAD_ZONE;
 	private static final double TRIGGER_SPINNER_SCALE = RobotMap.TRIGGER_SPINNER_SCALE;
 	private static final boolean HAS_LIGHT_RING = RobotMap.HAS_LIGHT_RING;
+	private static final boolean HAS_SPINNER = RobotMap.HAS_SPINNER_CLOSED_LOOP;
 	private static final int GAMEPAD_LEFT_Y_AXIS = Gamepad.LEFT_JOY_Y_AXIS;
 	private static final int GAMEPAD_RIGHT_Y_AXIS = Gamepad.RIGHT_JOY_Y_AXIS;
 	private static final int JOYSTICK_Y_AXIS = Gamepad.JOY_Y_AXIS;
@@ -63,7 +67,14 @@ public class OI {
 		
 		/** Light Ring ********************************************************/
 		if (HAS_LIGHT_RING) {
-			gamepad.A.toggleWhenPressed(new LightRingOn());
+			gamepad.A.toggleWhenPressed(new LightRing_On());
+		}
+		
+		/** Spinner ***********************************************************/
+		if (HAS_SPINNER) {
+			gamepad.B.whenPressed(new Spinner_Calibrate());
+			gamepad.LB.toggleWhenPressed(new Spinner_SetPosition());
+			gamepad.RB.toggleWhenPressed(new Spinner_SetSpeed());
 		}
 	}
 	

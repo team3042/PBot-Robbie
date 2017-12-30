@@ -24,6 +24,7 @@ public class LightRing extends Subsystem {
 	/** LightRing *************************************************************/
 	public LightRing() {
 		log.add("Constructor", LOG_LEVEL);
+		off();
 	}
 	
 	

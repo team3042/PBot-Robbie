@@ -13,11 +13,16 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class SpinnerClosedLoop extends Subsystem {
 	/** Configuration Constants ***********************************************/
 	private static final Log.Level LOG_LEVEL = RobotMap.LOG_SPINNER_CLOSED_LOOP;
-	private static final int PROFILE = RobotMap.SPINNER_PROFILE;
-	private static final double kP = RobotMap.kP_SPINNER;
-	private static final double kI = RobotMap.kI_SPINNER;
-	private static final double kD = RobotMap.kD_SPINNER;
-	private static final double kF = RobotMap.kF_SPINNER;
+	private static final int POSITION_PROFILE = RobotMap.SPINNER_POSITION_PROFILE;
+	private static final double kP_POSITION = RobotMap.kP_SPINNER_POSITION;
+	private static final double kI_POSITION = RobotMap.kI_SPINNER_POSITION;
+	private static final double kD_POSITION = RobotMap.kD_SPINNER_POSITION;
+	private static final double kF_POSITION = 0.0;
+	private static final int SPEED_PROFILE = RobotMap.SPINNER_SPEED_PROFILE;
+	private static final double kP_SPEED = RobotMap.kP_SPINNER_SPEED;
+	private static final double kI_SPEED = RobotMap.kI_SPINNER_SPEED;
+	private static final double kD_SPEED = RobotMap.kD_SPINNER_SPEED;
+	private static final double kF_SPEED = RobotMap.kF_SPINNER_SPEED;
 
 	
 	/** Instance Variables ****************************************************/
@@ -33,9 +38,13 @@ public class SpinnerClosedLoop extends Subsystem {
 		motor = spinnerMotor;
 		encoder = spinnerEncoder;
 		
-		motor.setProfile(PROFILE);
-		motor.setPID(kP, kI, kD);
-		motor.setF(kF);
+		motor.setProfile(POSITION_PROFILE);
+		motor.setPID(kP_POSITION, kI_POSITION, kD_POSITION);
+		motor.setF(kF_POSITION);
+		
+		motor.setProfile(SPEED_PROFILE);
+		motor.setPID(kP_SPEED, kI_SPEED, kD_SPEED);
+		motor.setF(kF_SPEED);
 	}
 	
 	
@@ -54,15 +63,17 @@ public class SpinnerClosedLoop extends Subsystem {
 	 * configEncoderCodesPerRev(COUNTS_PER_REV) in the SpinnerEncoder class.
 	 */
 	public void setSpeed(double speed){
-		motor.setProfile(PROFILE);
+		log.add("Speed", speed, LOG_LEVEL);
+		
+		motor.setProfile(SPEED_PROFILE);
 		motor.changeControlMode(TalonControlMode.Speed);
 		motor.set(speed);
 		
 	}
 	public void setPosition(double position) {
 		position += encoder.getPositionZero();
-		
-		motor.setProfile(PROFILE);
+
+		motor.setProfile(POSITION_PROFILE);
 		motor.changeControlMode(TalonControlMode.Position);
 		motor.set(position);
 	}

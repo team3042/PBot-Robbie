@@ -2,7 +2,7 @@ package org.usfirst.frc.team3042.robot.subsystems;
 
 import org.usfirst.frc.team3042.lib.Log;
 import org.usfirst.frc.team3042.robot.RobotMap;
-import org.usfirst.frc.team3042.robot.commands.SpinnerEncoderDashboard;
+import org.usfirst.frc.team3042.robot.commands.SpinnerEncoder_Dashboard;
 
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
@@ -45,7 +45,7 @@ public class SpinnerEncoder extends Subsystem {
 	 * Set the default command for the subsystem.
 	 */
 	public void initDefaultCommand() {
-		setDefaultCommand(new SpinnerEncoderDashboard());
+		setDefaultCommand(new SpinnerEncoder_Dashboard());
 	}
 	
 	
@@ -73,5 +73,22 @@ public class SpinnerEncoder extends Subsystem {
 	}
 	public double getPositionZero() {
 		return positionZero;
+	}
+	
+	
+	/** rpmToF ****************************************************************
+	 * Convert RPM reading into an F-Gain
+	 * Note that 1023 is the native full-forward power of the talons, 
+	 * equivalent to setting the power to 1.0.
+	 * The speed has to be converted from rpm to encoder counts per 100ms
+	 * 
+	 * so F = power * 1023 / speed
+	 */
+	public double rpmToF(double rpm, double power) {
+		//Convert to counts per 100 ms
+		double speed = rpm * 4 * COUNTS_PER_REV / 600;
+		double kF = power * 1023 / speed;
+		
+		return kF;
 	}
 }

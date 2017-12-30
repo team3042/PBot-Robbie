@@ -2,7 +2,7 @@ package org.usfirst.frc.team3042.robot.subsystems;
 
 import org.usfirst.frc.team3042.lib.Log;
 import org.usfirst.frc.team3042.robot.RobotMap;
-import org.usfirst.frc.team3042.robot.commands.SpinnerDrive;
+import org.usfirst.frc.team3042.robot.commands.Spinner_Drive;
 
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
@@ -23,9 +23,9 @@ public class Spinner extends Subsystem {
 	
 	/** Instance Variables ****************************************************/
 	Log log = new Log(LOG_LEVEL, getName());
-	CANTalon motor = new CANTalon(CAN_SPINNER);
+	public CANTalon motor = new CANTalon(CAN_SPINNER);
 	SpinnerEncoder encoder;
-	SpinnerClosedLoop closedLoop;
+	public SpinnerClosedLoop closedLoop;
 	
 	
 	/** Spinner ***************************************************************/
@@ -48,7 +48,7 @@ public class Spinner extends Subsystem {
 	 * Set the default command for the subsystem.
 	 */
 	public void initDefaultCommand() {
-		setDefaultCommand(new SpinnerDrive());
+		setDefaultCommand(new Spinner_Drive());
 	}
 	
 	
@@ -59,6 +59,9 @@ public class Spinner extends Subsystem {
 
 		motor.changeControlMode(TalonControlMode.PercentVbus);
 		motor.set(power);
+	}
+	public void stop() {
+		setPower(0.0);
 	}
 	
 	

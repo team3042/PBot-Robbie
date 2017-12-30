@@ -1,32 +1,30 @@
  package org.usfirst.frc.team3042.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team3042.lib.Log;
 import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
-import org.usfirst.frc.team3042.robot.subsystems.SpinnerEncoder;
+import org.usfirst.frc.team3042.robot.subsystems.LightRing;
 
 
-/** SpinnerEncoderDashboard ***************************************************/
-public class SpinnerEncoderDashboard extends Command {
+/** LightRing_On **************************************************************/
+public class LightRing_On extends Command {
 	/** Configuration Constants ***********************************************/
-	private static final Log.Level LOG_LEVEL = RobotMap.LOG_SPINNER_ENCODER_DASH;
+	private static final Log.Level LOG_LEVEL = RobotMap.LOG_LIGHT_RING;
 	
 	
 	/** Instance Variables ****************************************************/
 	Log log = new Log(LOG_LEVEL, getName());
-	SpinnerEncoder encoder = Robot.spinner.getEncoder();
+	LightRing lightRing = Robot.lightRing;
 	
 	
-	/** SpinnerEncoderDashboard ***********************************************
-	 * Required subsystems will cancel commands when this command is run.
-	 */
-	public SpinnerEncoderDashboard() {
+	/** LightRing_On **********************************************************/
+	public LightRing_On() {
 		log.add("Constructor", Log.Level.TRACE);
 		
-		requires(encoder);
+		requires(lightRing);
+		lightRing.off();
 	}
 
 	
@@ -36,7 +34,7 @@ public class SpinnerEncoderDashboard extends Command {
 	protected void initialize() {
 		log.add("Initialize", Log.Level.TRACE);
 		
-		encoder.reset();
+		lightRing.on();
 	}
 
 	
@@ -44,8 +42,6 @@ public class SpinnerEncoderDashboard extends Command {
 	 * Called repeatedly when this Command is scheduled to run
 	 */
 	protected void execute() {
-		SmartDashboard.putNumber("Spinner Revolutions", encoder.getPosition());
-		SmartDashboard.putNumber("Spinner Speed RPM",  encoder.getSpeed());
 	}
 	
 	
@@ -62,6 +58,8 @@ public class SpinnerEncoderDashboard extends Command {
 	 */
 	protected void end() {
 		log.add("End", Log.Level.TRACE);
+		
+		terminate();
 	}
 
 	
@@ -71,5 +69,13 @@ public class SpinnerEncoderDashboard extends Command {
 	 */
 	protected void interrupted() {
 		log.add("Interrupted", Log.Level.TRACE);
+		
+		terminate();
+	}
+	
+	
+	/** Graceful End **********************************************************/
+	private void terminate() {
+		lightRing.off();
 	}
 }

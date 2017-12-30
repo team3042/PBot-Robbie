@@ -1,29 +1,35 @@
  package org.usfirst.frc.team3042.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team3042.lib.Log;
 import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
-import org.usfirst.frc.team3042.robot.subsystems.LightRing;
+import org.usfirst.frc.team3042.robot.subsystems.DrivetrainEncoders;
 
 
-/** LightRingOn ***************************************************************/
-public class LightRingOn extends Command {
+/** DrivetrainEncoders_Dashboard **********************************************
+ * Output encoder values to the SmartDashboard
+ */
+public class DrivetrainEncoders_Dashboard extends Command {
 	/** Configuration Constants ***********************************************/
-	private static final Log.Level LOG_LEVEL = RobotMap.LOG_LIGHT_RING_ON;
-	
+	private static final Log.Level LOG_LEVEL = RobotMap.LOG_DRIVETRAIN_ENCODERS;
+	private static final double WHEEL_DIAMETER = RobotMap.WHEEL_DIAMETER;
+
 	
 	/** Instance Variables ****************************************************/
 	Log log = new Log(LOG_LEVEL, getName());
-	LightRing lightRing = Robot.lightRing;
+	DrivetrainEncoders encoders = Robot.drivetrain.getEncoders();
 	
 	
-	/** LightRingOn ***********************************************************/
-	public LightRingOn() {
+	/** DrivetrainEncoders_Dashboard ******************************************
+	 * Required subsystems will cancel commands when this command is run.
+	 */
+	public DrivetrainEncoders_Dashboard() {
 		log.add("Constructor", Log.Level.TRACE);
 		
-		requires(lightRing);
+		requires(encoders);
 	}
 
 	
@@ -33,7 +39,7 @@ public class LightRingOn extends Command {
 	protected void initialize() {
 		log.add("Initialize", Log.Level.TRACE);
 		
-		lightRing.on();
+		encoders.reset();
 	}
 
 	
@@ -41,6 +47,26 @@ public class LightRingOn extends Command {
 	 * Called repeatedly when this Command is scheduled to run
 	 */
 	protected void execute() {
+		double leftPosition = encoders.getLeftPosition();
+		double rightPosition = encoders.getRightPosition();
+		
+		double leftSpeed = encoders.getLeftSpeed();
+		double rightSpeed = encoders.getRightSpeed();
+
+		//Convert to length units, based on units of wheel diameter parameter
+		leftPosition *= WHEEL_DIAMETER * Math.PI;
+		rightPosition *= WHEEL_DIAMETER * Math.PI;
+		leftSpeed *=  WHEEL_DIAMETER * Math.PI;
+		rightSpeed *=  WHEEL_DIAMETER * Math.PI;
+		
+		//convert speed to per second instead of per minute
+		leftSpeed /= 60.0;
+		rightSpeed /= 60.0;
+		
+		SmartDashboard.putNumber("Left Distance", leftPosition);
+		SmartDashboard.putNumber("Right Distance", rightPosition);
+		SmartDashboard.putNumber("Left Speed", leftSpeed);
+		SmartDashboard.putNumber("Right Speed", rightSpeed);
 	}
 	
 	
@@ -57,8 +83,6 @@ public class LightRingOn extends Command {
 	 */
 	protected void end() {
 		log.add("End", Log.Level.TRACE);
-		
-		lightRing.off();
 	}
 
 	
@@ -68,7 +92,5 @@ public class LightRingOn extends Command {
 	 */
 	protected void interrupted() {
 		log.add("Interrupted", Log.Level.TRACE);
-		
-		lightRing.off();
 	}
 }

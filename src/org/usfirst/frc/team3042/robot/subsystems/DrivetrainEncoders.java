@@ -2,7 +2,7 @@ package org.usfirst.frc.team3042.robot.subsystems;
 
 import org.usfirst.frc.team3042.lib.Log;
 import org.usfirst.frc.team3042.robot.RobotMap;
-import org.usfirst.frc.team3042.robot.commands.DrivetrainEncodersDashboard;
+import org.usfirst.frc.team3042.robot.commands.DrivetrainEncoders_Dashboard;
 
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
@@ -53,7 +53,7 @@ public class DrivetrainEncoders extends Subsystem {
 	 * Set the default command for the subsystem.
 	 */
 	public void initDefaultCommand() {
-		setDefaultCommand(new DrivetrainEncodersDashboard());
+		setDefaultCommand(new DrivetrainEncoders_Dashboard());
 	}
 
 	
@@ -91,4 +91,22 @@ public class DrivetrainEncoders extends Subsystem {
 	public double getRightSpeed() {
 		return rightEncoder.getSpeed();
 	}
+	
+	
+	/** rpmToF ****************************************************************
+	 * Convert RPM reading into an F-Gain
+	 * Note that 1023 is the native full-forward power of the talons, 
+	 * equivalent to setting the power to 1.0.
+	 * The speed has to be converted from rpm to encoder counts per 100ms
+	 * 
+	 * so F = power * 1023 / speed
+	 */
+	public double rpmToF(double rpm, double power) {
+		//Convert to counts per 100 ms
+		double speed = rpm * 4 * COUNTS_PER_REVOLUTION / 600;
+		double kF = power * 1023 / speed;
+		
+		return kF;
+	}
+
 }

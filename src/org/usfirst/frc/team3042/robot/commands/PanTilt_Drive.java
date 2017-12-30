@@ -12,14 +12,14 @@ import org.usfirst.frc.team3042.robot.subsystems.PanTilt;
 import org.usfirst.frc.team3042.robot.triggers.POVButton;
 
 
-/** PanTiltDrive ************************************************************
+/** PanTilt_Drive ***********************************************************
  * Drive the Pan-Tilt servos using the POV buttons on the gamepad.
  * 
  * SERVO_SPEED determines how fast the servos move, measured per second.
  */
-public class PanTiltDrive extends Command {
+public class PanTilt_Drive extends Command {
 	/** Configuration Constants ***********************************************/
-	private static final Log.Level LOG_LEVEL = RobotMap.LOG_PAN_TILT_DRIVE;
+	private static final Log.Level LOG_LEVEL = RobotMap.LOG_PAN_TILT;
 	private static final double PAN_CENTER = RobotMap.PAN_CENTER;
 	private static final double TILT_CENTER = RobotMap.TILT_CENTER;
 	private static final double SERVO_SPEED = RobotMap.SERVO_SPEED;
@@ -35,10 +35,10 @@ public class PanTiltDrive extends Command {
 	OI oi = Robot.oi;
 	
 	
-	/** PanTiltDrive ************************************************************
+	/** PanTilt_Drive ***********************************************************
 	 * Required subsystems will cancel commands when this command is run.
 	 */
-	public PanTiltDrive() {
+	public PanTilt_Drive() {
 		log.add("Constructor", Log.Level.TRACE);
 		requires(panTilt);
 	}
@@ -108,8 +108,7 @@ public class PanTiltDrive extends Command {
 	 */
 	protected void end() {
 		log.add("End", Log.Level.TRACE);
-		
-		timer.stop();
+		terminate();
 	}
 
 	
@@ -119,7 +118,12 @@ public class PanTiltDrive extends Command {
 	 */
 	protected void interrupted() {
 		log.add("Interrupted", Log.Level.TRACE);
-
+		terminate();
+	}
+	
+	
+	/** Graceful End **********************************************************/
+	private void terminate() {
 		timer.stop();
 	}
 }
