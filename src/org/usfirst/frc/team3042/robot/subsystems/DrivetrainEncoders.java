@@ -104,9 +104,13 @@ public class DrivetrainEncoders extends Subsystem {
 	public double rpmToF(double rpm, double power) {
 		//Convert to counts per 100 ms
 		double speed = rpm * 4 * COUNTS_PER_REVOLUTION / 600;
-		double kF = power * 1023 / speed;
-		
+		double kF = power * 1023.0 / speed;
 		return kF;
 	}
-
+	public double rpmToPower(double rpm, double kF) {
+		//Convert to counts per 100 ms
+		double speed = rpm * 4 * COUNTS_PER_REVOLUTION / 600;
+		double power = kF * speed / 1023.0;
+		return power;
+	}
 }

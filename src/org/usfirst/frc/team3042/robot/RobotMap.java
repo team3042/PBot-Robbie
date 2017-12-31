@@ -11,8 +11,8 @@ public class RobotMap {
 	// Set the bot to which you intend to push code.
 	private static Bot currentBot = Bot.PBOT;
 
-	private static final boolean IS_PBOT 	= (currentBot == Bot.PBOT);
-	private static final boolean IS_ARTEMIS = (currentBot == Bot.ARTEMIS);
+	public static final boolean IS_PBOT 	= (currentBot == Bot.PBOT);
+	public static final boolean IS_ARTEMIS = (currentBot == Bot.ARTEMIS);
 	
 	
 	/** Robot Size Parameters *************************************************
@@ -91,8 +91,6 @@ public class RobotMap {
 												(IS_ARTEMIS) 	? 0.0 : 0.0;
 	public static final double kD_AUTON = 		(IS_PBOT) 		? 0.0 :
 												(IS_ARTEMIS) 	? 0.0 : 0.0;
-	public static final double kF_AUTON =		(IS_PBOT)		? 0.0 :
-												(IS_ARTEMIS)	? 0.0 : 0.0;
 	public static final int I_ZONE_AUTON =		(IS_PBOT)		? 0 :
 												(IS_ARTEMIS)	? 0 : 0;
 	//The rate of pushing motion profile points to the talon, in ms
@@ -110,7 +108,9 @@ public class RobotMap {
 	
 	
 	/** Drivetrain Gyro Drive Settings ****************************************/
-	
+	public static final double kP_GYRO = 0.0;
+	public static final double kI_GYRO = 0.0;
+	public static final double kD_GYRO = 0.0;
 	
 	
 	/** Spinner Settings ******************************************************/

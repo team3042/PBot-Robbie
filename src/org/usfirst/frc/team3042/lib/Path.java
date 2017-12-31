@@ -76,11 +76,9 @@ public class Path {
 		rightSpeed.add(speed * innerScale);
 	}
 	private double convertDistance(double angle, double radius) {
-		angle = Math.abs(angle);
-		radius = Math.abs(radius);
-
 		angle *= Math.PI / 180.0; //convert to radians
-		return angle * radius / CIRCUMFRENCE; // convert to revolutions
+		double distance = radius * angle;
+		return convertDistance(distance); // convert to revolutions
 	}
 	private double outerScale(double radius) {
 		radius = Math.abs(radius);
