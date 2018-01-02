@@ -15,7 +15,7 @@ import org.usfirst.frc.team3042.robot.subsystems.DrivetrainEncoders;
 public class DrivetrainEncoders_Dashboard extends Command {
 	/** Configuration Constants ***********************************************/
 	private static final Log.Level LOG_LEVEL = RobotMap.LOG_DRIVETRAIN_ENCODERS;
-	private static final double WHEEL_DIAMETER = RobotMap.WHEEL_DIAMETER;
+	private static final double CIRCUMFRENCE = Math.PI * RobotMap.WHEEL_DIAMETER;
 
 	
 	/** Instance Variables ****************************************************/
@@ -54,10 +54,10 @@ public class DrivetrainEncoders_Dashboard extends Command {
 		double rightSpeed = encoders.getRightSpeed();
 
 		//Convert to length units, based on units of wheel diameter parameter
-		leftPosition *= WHEEL_DIAMETER * Math.PI;
-		rightPosition *= WHEEL_DIAMETER * Math.PI;
-		leftSpeed *=  WHEEL_DIAMETER * Math.PI;
-		rightSpeed *=  WHEEL_DIAMETER * Math.PI;
+		leftPosition *= CIRCUMFRENCE;
+		rightPosition *= CIRCUMFRENCE;
+		leftSpeed *=  CIRCUMFRENCE;
+		rightSpeed *=  CIRCUMFRENCE;
 		
 		//convert speed to per second instead of per minute
 		leftSpeed /= 60.0;

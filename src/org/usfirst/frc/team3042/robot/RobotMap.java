@@ -20,8 +20,8 @@ public class RobotMap {
 	 * and speed closed-loop commands. For example, if the diameter is given 
 	 * in inches, position will be in inches and speed in inches per second.
 	 */
-	public static final double WHEEL_DIAMETER = 4;
-	public static final double ROBOT_WIDTH = 0.0;
+	public static final double WHEEL_DIAMETER = 4.0;
+	public static final double ROBOT_WIDTH = (IS_PBOT) ? 20.2 : 0.0;
 	
 	
 	/** USB ports *************************************************************/					
@@ -65,9 +65,9 @@ public class RobotMap {
 	public static final boolean REVERSE_RIGHT_MOTOR = 	(IS_PBOT) ? false: false;
 	// Maximum Acceleration given in power per second
 	public static final double ACCELERATION_MAX = 1.5;
-	public static final double kF_DRIVE_LEFT = 	(IS_PBOT) 		? 0.0 :
+	public static final double kF_DRIVE_LEFT = 	(IS_PBOT) 		? 1.02 :
 												(IS_ARTEMIS) 	? 0.0 : 0.0;
-	public static final double kF_DRIVE_RIGHT = (IS_PBOT) 		? 0.0 :
+	public static final double kF_DRIVE_RIGHT = (IS_PBOT) 		? 0.774 :
 												(IS_ARTEMIS) 	? 0.0 : 0.0;
 	
 	
@@ -83,34 +83,36 @@ public class RobotMap {
 	
 	
 	/** Drivetrain Autonomous Settings ****************************************/
-	public static final boolean HAS_AUTON = false;
+	public static final boolean HAS_AUTON = HAS_ENCODERS;
 	public static final int AUTON_PROFILE = 0;
-	public static final double kP_AUTON = 		(IS_PBOT) 		? 0.0 :
+	public static final double kP_AUTON = 		(IS_PBOT) 		? 0.4 :
 												(IS_ARTEMIS) 	? 0.0 : 0.0;
 	public static final double kI_AUTON = 		(IS_PBOT) 		? 0.0 :
 												(IS_ARTEMIS) 	? 0.0 : 0.0;
-	public static final double kD_AUTON = 		(IS_PBOT) 		? 0.0 :
+	public static final double kD_AUTON = 		(IS_PBOT) 		? 0.8 :
 												(IS_ARTEMIS) 	? 0.0 : 0.0;
 	public static final int I_ZONE_AUTON =		(IS_PBOT)		? 0 :
 												(IS_ARTEMIS)	? 0 : 0;
 	//The rate of pushing motion profile points to the talon, in ms
 	public static final int AUTON_FRAME_RATE = 5;
 	//Parameters for calibrating the F-gain
-	public static final double AUTON_CALIBRATE_POWER = 1.0;
-	public static final double AUTON_CALIBRATE_TIME = 10.0; //seconds
+	public static final double AUTON_CALIBRATE_POWER = 0.2;
+	public static final double AUTON_CALIBRATE_TIME = 5.0; //seconds
 	public static final int AUTON_COUNT_AVERAGE = 20;
 	//Parameters for motion profile driving
 	public static final double AUTON_DT = 0.01; //time interval in sec
 	public static final double AUTON_ACCEL_TIME = 0.5; //time in sec
 	public static final double AUTON_SMOOTH_TIME = 0.1; //time in sec
-	public static final double AUTON_MAX_ACCEL = 500.0; //rev per sec per sec
+	public static final double AUTON_MAX_ACCEL = 3.0; //rev per sec per sec
 	public static final int AUTON_BUFFER_TRIGGER = 5;
 	
 	
 	/** Drivetrain Gyro Drive Settings ****************************************/
-	public static final double kP_GYRO = 0.0;
+	public static final double kP_GYRO = 0.055;
 	public static final double kI_GYRO = 0.0;
-	public static final double kD_GYRO = 0.0;
+	public static final double kD_GYRO = 0.11;
+	public static final double ANGLE_TOLERANCE = 2.0;
+	public static final double MAX_SPEED_GYRO = 0.4;
 	
 	
 	/** Spinner Settings ******************************************************/
@@ -181,18 +183,18 @@ public class RobotMap {
 	public static final Log.Level 	LOG_GLOBAL 					= Log.Level.DEBUG;
 	public static final Log.Level 	LOG_ROBOT 					= Log.Level.TRACE;
 	public static final Log.Level	LOG_OI 						= Log.Level.TRACE;
-	public static final Log.Level	LOG_AXIS_TRIGGER 			= Log.Level.TRACE;
-	public static final Log.Level	LOG_POV_BUTTON				= Log.Level.TRACE;
+	public static final Log.Level	LOG_AXIS_TRIGGER 			= Log.Level.ERROR;
+	public static final Log.Level	LOG_POV_BUTTON				= Log.Level.ERROR;
 	/** Subsystems **/
 	public static final Log.Level	LOG_DRIVETRAIN				= Log.Level.TRACE;
 	public static final Log.Level	LOG_DRIVETRAIN_FOLLOWERS	= Log.Level.TRACE;
-	public static final Log.Level	LOG_DRIVETRAIN_ENCODERS 	= Log.Level.TRACE;
-	public static final Log.Level	LOG_DRIVETRAIN_AUTON		= Log.Level.TRACE;
+	public static final Log.Level	LOG_DRIVETRAIN_ENCODERS 	= Log.Level.DEBUG;
+	public static final Log.Level	LOG_DRIVETRAIN_AUTON		= Log.Level.DEBUG;
 	public static final Log.Level	LOG_SPINNER					= Log.Level.TRACE;
 	public static final Log.Level	LOG_SPINNER_ENCODER			= Log.Level.TRACE;
 	public static final Log.Level	LOG_SPINNER_CLOSED_LOOP		= Log.Level.DEBUG;
 	public static final Log.Level 	LOG_PAN_TILT 				= Log.Level.TRACE;
-	public static final Log.Level	LOG_GYROSCOPE				= Log.Level.TRACE;
+	public static final Log.Level	LOG_GYROSCOPE				= Log.Level.DEBUG;
 	public static final Log.Level	LOG_LIGHT_RING				= Log.Level.TRACE;
 	public static final Log.Level	LOG_EXAMPLE_SUBSYSTEM 		= Log.Level.TRACE;
 }

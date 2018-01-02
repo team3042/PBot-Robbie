@@ -7,11 +7,13 @@ import org.usfirst.frc.team3042.robot.RobotMap;
 /** Path **********************************************************************/
 public class Path {
 	/** Configurations Constants **********************************************/
+	private static final Log.Level LOG_LEVEL = RobotMap.LOG_DRIVETRAIN_AUTON;
 	private static final double ROBOT_WIDTH = RobotMap.ROBOT_WIDTH;
 	private static final double CIRCUMFRENCE = Math.PI * RobotMap.WHEEL_DIAMETER;
 
 	
 	/** Instance Variables ****************************************************/
+	Log log = new Log(LOG_LEVEL, "Path");
 	ArrayList<Double> leftDistance = new ArrayList<Double>();
 	ArrayList<Double> rightDistance = new ArrayList<Double>();
 	ArrayList<Double> leftSpeed = new ArrayList<Double>();
@@ -45,50 +47,54 @@ public class Path {
 	
 	/** Add Turn **************************************************************
 	 * angle: degrees
-	 * radius: physical unit matching that of the wheel diameter constant
+	 * radius: number of robot widths for turn radius of the outer wheel
+	 * 			0.5 would mean turn in place
+	 * 			1.0 would mean turn around one side
 	 * speed: physical unit of distance per second
+	 * 
+	 * The speed is the speed of the outer wheel.
 	 * 
 	 * Converted to revolutions and rps for the motion profile.
 	 * Direction is determined by the sign of speed.
 	 */
 	public void addLeftTurn(double angle, double radius, double speed) {
+		radius = convertRadius(radius);
 		double distance = convertDistance(angle, radius);
 		speed = convertSpeed(speed);
 		
-		double outerScale = outerScale(radius);
 		double innerScale = innerScale(radius);
 		
 		leftDistance.add(distance * Math.abs(innerScale));
 		leftSpeed.add(speed * innerScale);
-		rightDistance.add(distance * outerScale);
-		rightSpeed.add(speed * outerScale);
+		rightDistance.add(distance);
+		rightSpeed.add(speed);
 	}
 	public void addRightTurn(double angle, double radius, double speed) {
+		radius = convertRadius(radius);
 		double distance = convertDistance(angle, radius);
 		speed = convertSpeed(speed);
 		
-		double outerScale = outerScale(radius);
 		double innerScale = innerScale(radius);
 		
-		leftDistance.add(distance * outerScale);
-		leftSpeed.add(speed * outerScale);
+		leftDistance.add(distance);
+		leftSpeed.add(speed);
 		rightDistance.add(distance * Math.abs(innerScale));
 		rightSpeed.add(speed * innerScale);
+	}
+	private double convertRadius(double radius) {
+		radius *= ROBOT_WIDTH;
+		return radius;
 	}
 	private double convertDistance(double angle, double radius) {
 		angle *= Math.PI / 180.0; //convert to radians
 		double distance = radius * angle;
 		return convertDistance(distance); // convert to revolutions
 	}
-	private double outerScale(double radius) {
-		radius = Math.abs(radius);
-		double outerRadius = radius + 0.5 * ROBOT_WIDTH;
-		return outerRadius / radius;
-	}
 	private double innerScale(double radius) {
 		radius = Math.abs(radius);
-		double innerRadius = radius - 0.5 * ROBOT_WIDTH;
-		return innerRadius / radius;
+		double innerRadius = radius - ROBOT_WIDTH;
+		if (radius > 0.0) innerRadius /= radius;
+		return innerRadius;
 	}
 	
 	

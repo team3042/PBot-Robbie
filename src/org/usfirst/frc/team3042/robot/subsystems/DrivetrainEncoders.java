@@ -61,9 +61,16 @@ public class DrivetrainEncoders extends Subsystem {
 	public void reset() {
 		leftPositionZero = leftEncoder.getPosition();
 		rightPositionZero = rightEncoder.getPosition();
-		
+				
 		leftCountsZero = leftEncoder.getEncPosition();
 		rightCountsZero = rightEncoder.getEncPosition();
+	}
+	public void setToZero() {
+		leftPositionZero = 0.0;
+		rightPositionZero = 0.0;
+		
+		leftCountsZero = 0;
+		rightCountsZero = 0;
 	}
 	
 	

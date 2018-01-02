@@ -45,7 +45,8 @@ public class Drivetrain extends Subsystem {
 		if (HAS_ENCODERS) {
 			encoders = new DrivetrainEncoders(leftMotor, rightMotor);
 			
-			if (HAS_AUTON) auton = new DrivetrainAuton();
+			if (HAS_AUTON) auton = 
+					new DrivetrainAuton(leftMotor, rightMotor, encoders);
 		}
 		
 		initMotor(leftMotor, REVERSE_LEFT_MOTOR);

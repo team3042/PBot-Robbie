@@ -1,7 +1,6 @@
 package org.usfirst.frc.team3042.robot.subsystems;
 
 import org.usfirst.frc.team3042.lib.Log;
-import org.usfirst.frc.team3042.robot.Robot;
 import org.usfirst.frc.team3042.robot.RobotMap;
 
 import com.ctre.CANTalon;
@@ -28,7 +27,7 @@ public class DrivetrainAuton extends Subsystem {
 	//The Frame Rate is given in ms
 	private static final int FRAME_RATE = RobotMap.AUTON_FRAME_RATE;
 
-		
+	
 	/** Periodic Runnable *****************************************************
 	 * Create a separate thread to push motion profile points out to the Talon
 	 */
@@ -42,15 +41,19 @@ public class DrivetrainAuton extends Subsystem {
 	
 	/** Instance Variables ****************************************************/
 	Log log = new Log(LOG_LEVEL, getName());
-	Notifier notifier = new Notifier (new PeriodicRunnable());
-	CANTalon leftMotor = Robot.drivetrain.leftMotor;
-	CANTalon rightMotor = Robot.drivetrain.rightMotor;
-	DrivetrainEncoders encoders = Robot.drivetrain.encoders;
+	CANTalon leftMotor, rightMotor;
+	DrivetrainEncoders encoders;
+	Notifier notifier;
 	
-	
+
 	/** DrivetrainAuton *******************************************************/
-	public DrivetrainAuton() {
+	public DrivetrainAuton(CANTalon leftMotor, CANTalon rightMotor, 
+			DrivetrainEncoders encoders) {
 		log.add("Constructor", LOG_LEVEL);
+		
+		this.leftMotor = leftMotor;
+		this.rightMotor = rightMotor;
+		this.encoders = encoders;
 		
 		initMotor(leftMotor, kF_LEFT);
 		initMotor(rightMotor, kF_RIGHT);;
@@ -58,6 +61,7 @@ public class DrivetrainAuton extends Subsystem {
 		/** Starting talons processing motion profile **/
 		//Convert from ms to sec for the notifier
 		double frameRateSec = (double)FRAME_RATE / 1000.0;
+		notifier = new Notifier(new PeriodicRunnable());
 		notifier.startPeriodic(frameRateSec);
 	}
 	private void initMotor(CANTalon motor, double kF) {
@@ -85,7 +89,7 @@ public class DrivetrainAuton extends Subsystem {
 		initMotor(rightMotor);
 		disableMotionProfile();
 		removeUnderrun();
-		encoders.reset();
+		encoders.setToZero();
 	}
 	private void initMotor(CANTalon motor) {
 		motor.clearMotionProfileTrajectories();
