@@ -3,8 +3,8 @@ package org.usfirst.frc.team3042.robot.subsystems;
 import org.usfirst.frc.team3042.lib.Log;
 import org.usfirst.frc.team3042.robot.RobotMap;
 
-import com.ctre.CANTalon;
-import com.ctre.CANTalon.TalonControlMode;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -23,20 +23,16 @@ public class DrivetrainFollowers extends Subsystem {
 	
 	/** Instance Variables ****************************************************/
 	Log log = new Log(LOG_LEVEL, getName());
-	CANTalon leftFollower = new CANTalon(CAN_LEFT_FOLLOWER);
-	CANTalon rightFollower = new CANTalon(CAN_RIGHT_FOLLOWER);	
+	TalonSRX leftFollower = new TalonSRX(CAN_LEFT_FOLLOWER);
+	TalonSRX rightFollower = new TalonSRX(CAN_RIGHT_FOLLOWER);	
 	
 
 	/** DrivetrainFollowers **************************************************/
 	public DrivetrainFollowers() {
 		log.add("Constructor", Log.Level.TRACE);
 		
-		initMotor(leftFollower, CAN_LEFT_MOTOR);
-		initMotor(rightFollower, CAN_RIGHT_MOTOR);
-	}
-	private void initMotor(CANTalon motor, int leaderCANid) {
-		motor.changeControlMode(TalonControlMode.Follower);
-		motor.set(leaderCANid);
+		leftFollower.set(ControlMode.Follower, CAN_LEFT_MOTOR);
+		rightFollower.set(ControlMode.Follower, CAN_RIGHT_MOTOR);
 	}
 	
 	

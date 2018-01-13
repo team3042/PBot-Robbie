@@ -10,7 +10,7 @@ import org.usfirst.frc.team3042.robot.RobotMap;
 import org.usfirst.frc.team3042.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team3042.robot.subsystems.DrivetrainAuton;
 
-import com.ctre.CANTalon.MotionProfileStatus;
+import com.ctre.phoenix.motion.MotionProfileStatus;
 
 
 /** DrivetrainAuton_Drive *****************************************************
@@ -74,8 +74,7 @@ public class DrivetrainAuton_Drive extends Command {
 			auton.removeRightUnderrun();
 		}
 		
-		isLast = leftStatus.activePoint.isLastPoint || 
-				rightStatus.activePoint.isLastPoint;
+		isLast = leftStatus.isLast || rightStatus.isLast;
 	}
 	
 	

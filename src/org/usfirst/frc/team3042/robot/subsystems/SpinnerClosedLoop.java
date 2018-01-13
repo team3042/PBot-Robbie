@@ -3,8 +3,8 @@ package org.usfirst.frc.team3042.robot.subsystems;
 import org.usfirst.frc.team3042.lib.Log;
 import org.usfirst.frc.team3042.robot.RobotMap;
 
-import com.ctre.CANTalon;
-import com.ctre.CANTalon.TalonControlMode;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -17,34 +17,42 @@ public class SpinnerClosedLoop extends Subsystem {
 	private static final double kP_POSITION = RobotMap.kP_SPINNER_POSITION;
 	private static final double kI_POSITION = RobotMap.kI_SPINNER_POSITION;
 	private static final double kD_POSITION = RobotMap.kD_SPINNER_POSITION;
-	private static final double kF_POSITION = 0.0;
+	private static final double kF_POSITION = RobotMap.kF_SPINNER_POSITION;
+	private static final int I_ZONE_POSITION = RobotMap.I_ZONE_SPINNER_POSITION;
 	private static final int SPEED_PROFILE = RobotMap.SPINNER_SPEED_PROFILE;
 	private static final double kP_SPEED = RobotMap.kP_SPINNER_SPEED;
 	private static final double kI_SPEED = RobotMap.kI_SPINNER_SPEED;
 	private static final double kD_SPEED = RobotMap.kD_SPINNER_SPEED;
 	private static final double kF_SPEED = RobotMap.kF_SPINNER_SPEED;
-
+	private static final int I_ZONE_SPEED = RobotMap.I_ZONE_SPINNER_SPEED;
+	private static final double COUNTS_PER_REV = RobotMap.SPINNER_ENCODER_COUNTS_PER_REV;
+	private static final int TIMEOUT = RobotMap.SPINNER_TIMEOUT;
+	private static final int PIDIDX = RobotMap.SPINNER_PIDIDX;
 	
 	/** Instance Variables ****************************************************/
 	Log log = new Log(LOG_LEVEL, getName());
-	CANTalon motor;
+	TalonSRX motor;
 	SpinnerEncoder encoder;
 	
 	
 	/** SpinnerClosedLoop *****************************************************/
-	public SpinnerClosedLoop(CANTalon spinnerMotor, SpinnerEncoder spinnerEncoder) {
+	public SpinnerClosedLoop(TalonSRX spinnerMotor, SpinnerEncoder spinnerEncoder) {
 		log.add("Constructor", LOG_LEVEL);
 		
 		motor = spinnerMotor;
 		encoder = spinnerEncoder;
 		
-		motor.setProfile(POSITION_PROFILE);
-		motor.setPID(kP_POSITION, kI_POSITION, kD_POSITION);
-		motor.setF(kF_POSITION);
+		motor.config_kP(POSITION_PROFILE, kP_POSITION, TIMEOUT);
+		motor.config_kI(POSITION_PROFILE, kI_POSITION, TIMEOUT);
+		motor.config_kD(POSITION_PROFILE, kD_POSITION, TIMEOUT);
+		motor.config_kF(POSITION_PROFILE, kF_POSITION, TIMEOUT);
+		motor.config_IntegralZone(POSITION_PROFILE, I_ZONE_POSITION, TIMEOUT);
 		
-		motor.setProfile(SPEED_PROFILE);
-		motor.setPID(kP_SPEED, kI_SPEED, kD_SPEED);
-		motor.setF(kF_SPEED);
+		motor.config_kP(SPEED_PROFILE, kP_SPEED, TIMEOUT);
+		motor.config_kI(SPEED_PROFILE, kI_SPEED, TIMEOUT);
+		motor.config_kD(SPEED_PROFILE, kD_SPEED, TIMEOUT);
+		motor.config_kF(SPEED_PROFILE, kF_SPEED, TIMEOUT);
+		motor.config_IntegralZone(SPEED_PROFILE, I_ZONE_SPEED, TIMEOUT);
 	}
 	
 	
@@ -57,24 +65,23 @@ public class SpinnerClosedLoop extends Subsystem {
 
 
 	/** Spinner Closed-Loop Control *******************************************
-	 * Units for speed is RPM
-	 * Units for Position is revolutions
-	 * These units are leveraged because of a call to 
-	 * configEncoderCodesPerRev(COUNTS_PER_REV) in the SpinnerEncoder class.
+	 * Input units for speed is RPM, convert to counts per 100ms for talon
+	 * Input units for Position is revolutions, convert to counts for talon
 	 */
 	public void setSpeed(double speed){
 		log.add("Speed", speed, LOG_LEVEL);
 		
-		motor.setProfile(SPEED_PROFILE);
-		motor.changeControlMode(TalonControlMode.Speed);
-		motor.set(speed);
-		
+		double cp100ms = speed * (double)COUNTS_PER_REV / 600.0;
+				
+		motor.selectProfileSlot(SPEED_PROFILE, PIDIDX);
+		motor.set(ControlMode.Velocity, cp100ms);
 	}
 	public void setPosition(double position) {
 		position += encoder.getPositionZero();
-
-		motor.setProfile(POSITION_PROFILE);
-		motor.changeControlMode(TalonControlMode.Position);
-		motor.set(position);
+		
+		double counts = position * COUNTS_PER_REV;
+				
+		motor.selectProfileSlot(POSITION_PROFILE, PIDIDX);
+		motor.set(ControlMode.Position, counts);
 	}
 }

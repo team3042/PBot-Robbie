@@ -4,8 +4,9 @@ import org.usfirst.frc.team3042.lib.Log;
 import org.usfirst.frc.team3042.robot.RobotMap;
 import org.usfirst.frc.team3042.robot.commands.Spinner_Drive;
 
-import com.ctre.CANTalon;
-import com.ctre.CANTalon.TalonControlMode;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -15,7 +16,7 @@ public class Spinner extends Subsystem {
 	/** Configuration Constants ***********************************************/
 	private static final Log.Level LOG_LEVEL = RobotMap.LOG_SPINNER;
 	private static final int CAN_SPINNER = RobotMap.CAN_SPINNER;
-	private static final boolean BRAKE_MODE = RobotMap.SPINNER_BRAKE_MODE;
+	private static final NeutralMode BRAKE_MODE = RobotMap.SPINNER_BRAKE_MODE;
 	private static final boolean REVERSE_SPINNER = RobotMap.REVERSE_SPINNER;
 	private static final boolean HAS_ENCODER = RobotMap.HAS_SPINNER_ENCODER;
 	private static final boolean HAS_CLOSED_LOOP = RobotMap.HAS_SPINNER_CLOSED_LOOP;
@@ -23,7 +24,7 @@ public class Spinner extends Subsystem {
 	
 	/** Instance Variables ****************************************************/
 	Log log = new Log(LOG_LEVEL, getName());
-	public CANTalon motor = new CANTalon(CAN_SPINNER);
+	public TalonSRX motor = new TalonSRX(CAN_SPINNER);
 	SpinnerEncoder encoder;
 	public SpinnerClosedLoop closedLoop;
 	
@@ -38,9 +39,9 @@ public class Spinner extends Subsystem {
 			if (HAS_CLOSED_LOOP) closedLoop = new SpinnerClosedLoop(motor, encoder);
 		}
 		
-		motor.enableBrakeMode(BRAKE_MODE);
+		motor.setNeutralMode(BRAKE_MODE);
 		motor.setInverted(REVERSE_SPINNER); 	// affects percent Vbus mode
-		motor.reverseOutput(REVERSE_SPINNER); 	// affects closed-loop mode
+		motor.setSensorPhase(REVERSE_SPINNER); 	// affects closed-loop mode
 	}
 	
 	
@@ -57,8 +58,7 @@ public class Spinner extends Subsystem {
 		power = Math.min(1.0, power);
 		power = Math.max(-1.0, power);
 
-		motor.changeControlMode(TalonControlMode.PercentVbus);
-		motor.set(power);
+		motor.set(ControlMode.PercentOutput, power);
 	}
 	public void stop() {
 		setPower(0.0);

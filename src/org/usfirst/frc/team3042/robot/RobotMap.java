@@ -2,6 +2,8 @@ package org.usfirst.frc.team3042.robot;
 
 import org.usfirst.frc.team3042.lib.Log;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 /** RobotMap ******************************************************************
  * The robot configuration file.
  */
@@ -60,7 +62,7 @@ public class RobotMap {
 	/** Drivetrain Settings ***************************************************/
 	public static final boolean HAS_DRIVETRAIN = true;
 	public static final boolean HAS_FOLLOWERS = !IS_PBOT;
-	public static final boolean DRIVETRAIN_BRAKE_MODE = true;
+	public static final NeutralMode DRIVETRAIN_BRAKE_MODE = NeutralMode.Brake;
 	public static final boolean REVERSE_LEFT_MOTOR = 	(IS_PBOT) ? true : false;
 	public static final boolean REVERSE_RIGHT_MOTOR = 	(IS_PBOT) ? false: false;
 	// Maximum Acceleration given in power per second
@@ -78,8 +80,6 @@ public class RobotMap {
 	public static final int COUNTS_PER_REVOLUTION = 360;
 	//How often the encoders update on the CAN, in milliseconds
 	public static final int ENCODER_FRAME_RATE = 10;
-	public static final boolean REVERSE_LEFT_ENCODER = true;
-	public static final boolean REVERSE_RIGHT_ENCODER = false;
 	
 	
 	/** Drivetrain Autonomous Settings ****************************************/
@@ -100,11 +100,15 @@ public class RobotMap {
 	public static final double AUTON_CALIBRATE_TIME = 5.0; //seconds
 	public static final int AUTON_COUNT_AVERAGE = 20;
 	//Parameters for motion profile driving
-	public static final double AUTON_DT = 0.01; //time interval in sec
+	public static final int AUTON_DT_MS = 10;
+	public static final double AUTON_DT_SEC = (double)AUTON_DT_MS / 1000.0;
 	public static final double AUTON_ACCEL_TIME = 0.5; //time in sec
 	public static final double AUTON_SMOOTH_TIME = 0.1; //time in sec
 	public static final double AUTON_MAX_ACCEL = 3.0; //rev per sec per sec
 	public static final int AUTON_BUFFER_TRIGGER = 5;
+	public static final int AUTON_TIMEOUT = 0; // timeout in ms; set to zero
+	public static final int AUTON_PIDIDX = 0; // used for cascading PID; set to zero
+	public static final int AUTON_HEADING = 0; //unimplemented feature; set to zero
 	
 	
 	/** Drivetrain Gyro Drive Settings ****************************************/
@@ -117,7 +121,7 @@ public class RobotMap {
 	
 	/** Spinner Settings ******************************************************/
 	public static final boolean HAS_SPINNER = IS_PBOT;
-	public static final boolean SPINNER_BRAKE_MODE = true;
+	public static final NeutralMode SPINNER_BRAKE_MODE = NeutralMode.Brake;
 	public static final boolean REVERSE_SPINNER = false;
 	
 	
@@ -129,21 +133,26 @@ public class RobotMap {
 	
 	
 	/** Spinner Closed-Loop Settings ******************************************/
-	public static boolean HAS_SPINNER_CLOSED_LOOP = HAS_SPINNER;
-	public static int SPINNER_POSITION_PROFILE = 0;
+	public static final boolean HAS_SPINNER_CLOSED_LOOP = HAS_SPINNER;
+	public static final int SPINNER_POSITION_PROFILE = 0;
 	public static final double kP_SPINNER_POSITION = 0.51;
 	public static final double kI_SPINNER_POSITION = 0.0;
 	public static final double kD_SPINNER_POSITION = 5.1;
-	public static int SPINNER_SPEED_PROFILE = 1;
+	public static final double kF_SPINNER_POSITION = 0.0; //Should be set to zero
+	public static final int I_ZONE_SPINNER_POSITION = 0;
+	public static final int SPINNER_SPEED_PROFILE = 1;
 	public static final double kP_SPINNER_SPEED = 0.02;
 	public static final double kI_SPINNER_SPEED = 0.0;
 	public static final double kD_SPINNER_SPEED = 0.2;
 	public static final double kF_SPINNER_SPEED = 0.0245;
+	public static final int I_ZONE_SPINNER_SPEED = 0;
 	public static final double SPINNER_DEFAULT_POSITION = 1.0; //revolutions
 	public static final double SPINNER_DEFAULT_SPEED = 500; //RPM
 	public static final double SPINNER_CALIBRATE_POWER = 0.1;
 	public static final double SPINNER_CALIBRATE_TIME = 10.0; //seconds
 	public static final int SPINNER_COUNT_AVERAGE = 20;
+	public static final int SPINNER_TIMEOUT = 0; // timeout in ms; set to zero
+	public static final int SPINNER_PIDIDX = 0; // used for cascading PID; set to zero
 	
 	
 	/** PanTilt Settings ******************************************************/

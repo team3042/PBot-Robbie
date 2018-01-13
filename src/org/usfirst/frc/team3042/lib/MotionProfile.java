@@ -2,8 +2,9 @@ package org.usfirst.frc.team3042.lib;
 
 import org.usfirst.frc.team3042.robot.RobotMap;
 
-import com.ctre.CANTalon;
-import com.ctre.CANTalon.TrajectoryPoint;
+import com.ctre.phoenix.motion.TrajectoryPoint;
+import com.ctre.phoenix.motion.TrajectoryPoint.TrajectoryDuration;
+
 
 /** MotionProfile *************************************************************
  * All distances are assumed to be in revolutions.
@@ -13,10 +14,12 @@ public class MotionProfile {
 	/** Configuration Constants ***********************************************/
 	private static final Log.Level LOG_LEVEL = RobotMap.LOG_DRIVETRAIN_AUTON;
 	private static final int PROFILE = RobotMap.AUTON_PROFILE;
-	private static final double DT = RobotMap.AUTON_DT;
+	private static final double DT_SEC = RobotMap.AUTON_DT_SEC;
 	private static final double ACCEL_TIME = RobotMap.AUTON_ACCEL_TIME;
 	private static final double SMOOTH_TIME = RobotMap.AUTON_SMOOTH_TIME;
 	private static final double MAX_ACCEL = RobotMap.AUTON_MAX_ACCEL;
+	private static final int COUNTS_PER_REV = RobotMap.COUNTS_PER_REVOLUTION;
+	private static final int PIDIDX = RobotMap.AUTON_PIDIDX;
 	
 	
 	/** Instance Variables ****************************************************/
@@ -58,18 +61,20 @@ public class MotionProfile {
 	}
 	
 	
-	/** calculateVelocity *****************************************************/
+	/** calculateVelocity *****************************************************
+	 * Velocity calculated in revolutions per second. 
+	 */
 	private double[] calculateVelocity(double[] distance, double[] speed) {
 		int stages = speed.length;
 
 		/** Calculate array length ************************/
-		int accelPoints = (int)Math.floor(ACCEL_TIME/DT);
-		int smoothPoints = (int)Math.floor(SMOOTH_TIME/DT);
+		int accelPoints = (int)Math.floor(ACCEL_TIME/DT_SEC);
+		int smoothPoints = (int)Math.floor(SMOOTH_TIME/DT_SEC);
 		int length = accelPoints + smoothPoints;
 		int[] flatPoints = new int[stages];
 		for (int stage=0; stage<stages; stage++) {
 			double flatTime = Math.abs(distance[stage]/speed[stage]);
-			flatPoints[stage] = (int)Math.floor(flatTime/DT);
+			flatPoints[stage] = (int)Math.floor(flatTime/DT_SEC);
 			length += flatPoints[stage];
 		}
 
@@ -111,7 +116,9 @@ public class MotionProfile {
 	}
 	
 	
-	/** calculatePosition *****************************************************/
+	/** calculatePosition *****************************************************
+	 * Position given in revolutions. 
+	 */
 	private double[] calculatePosition(double[] velocity) {
 		int length = velocity.length;
 		double[] position = new double[length];
@@ -119,32 +126,37 @@ public class MotionProfile {
 		position[0] = 0.0;
 		for (int n=1; n<length; n++) {
 			double averageVelocity = 0.5 * (velocity[n-1] + velocity[n]);
-			position[n] = position[n-1] + averageVelocity * DT;
+			position[n] = position[n-1] + averageVelocity * DT_SEC;
 		}
 		return position;
 	}
 	
 	
-	/** fillTrajectory ********************************************************/
+	/** fillTrajectory ********************************************************
+	 * Position is calculated in revolutions, convert to counts for talon.
+	 * 
+	 * Velocity is calculated in RPS, convert to counts per 100 ms for talon.
+	 */
 	private void fillTrajectory(double[] position, double[] velocity) {
 		int length = velocity.length;
 		trajectory = new TrajectoryPoint[length];
 		
 		for (int n=0; n<length; n++) {
-			trajectory[n] = new CANTalon.TrajectoryPoint();
-			trajectory[n].timeDurMs = (int)(DT * 1000.0); //convert to ms for Talon
-			trajectory[n].position = position[n];
-			trajectory[n].velocity = velocity[n] * 60.0; //convert to rpm for Talon
-			trajectory[n].profileSlotSelect = PROFILE;
-			trajectory[n].velocityOnly = false;
+			trajectory[n] = new TrajectoryPoint();
+			trajectory[n].position = position[n] * COUNTS_PER_REV;
+			trajectory[n].velocity = velocity[n] * COUNTS_PER_REV / 10.0;			
+			trajectory[n].headingDeg = 0; // Set to zero; unimplemented feature
+			trajectory[n].profileSlotSelect0 = PROFILE;
+			trajectory[n].profileSlotSelect1 = PIDIDX;
+			trajectory[n].timeDur = TrajectoryDuration.Trajectory_Duration_0ms;
 			trajectory[n].zeroPos = (n == 0);
 			trajectory[n].isLastPoint = (n == length-1);
 		}
 	}
 	
 	/** getPoint **************************************************************/
-	public CANTalon.TrajectoryPoint getPoint(int n) {
-		CANTalon.TrajectoryPoint point = null;
+	public TrajectoryPoint getPoint(int n) {
+		TrajectoryPoint point = null;
 		if ( (n>= 0) && (n<getLength()) ) {
 			point = trajectory[n];
 		}
