@@ -18,9 +18,9 @@ import java.util.concurrent.locks.ReentrantLock;
 //import edu.wpi.first.wpilibj.communication.FRCNetworkCommunicationsLibrary.tResourceType;
 //import edu.wpi.first.wpilibj.communication.UsageReporting;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import edu.wpi.first.wpilibj.Sendable;
-import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 //import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -291,9 +291,6 @@ public class ADIS16448_IMU extends GyroBase implements Gyro, PIDSource, Sendable
     m_calculate_task = new Thread(new CalculateTask(this));
     m_calculate_task.setDaemon(true);
     m_calculate_task.start();
-
-    //UsageReporting.report(tResourceType.kResourceType_ADIS16448, 0);
-    LiveWindow.addSensor("ADIS16448_IMU", 0, this);
   }
 
   /*
@@ -1078,24 +1075,33 @@ public class ADIS16448_IMU extends GyroBase implements Gyro, PIDSource, Sendable
     m_tilt_comp_yaw = enabled;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void updateTable() {
-    NetworkTable table = getTable();
-    if (table != null) {
-    	table.
-      table.putNumber("Value", getAngle());
-      table.putNumber("Pitch", getPitch());
-      table.putNumber("Roll", getRoll());
-      table.putNumber("Yaw", getYaw());
-      table.putNumber("AccelX", getAccelX());
-      table.putNumber("AccelY", getAccelY());
-      table.putNumber("AccelZ", getAccelZ());
-      table.putNumber("AngleX", getAngleX());
-      table.putNumber("AngleY", getAngleY());
-      table.putNumber("AngleZ", getAngleZ());
-    }
+  void InitSendable(SendableBuilder builder) {
+	  builder.setSmartDashboardType("ADIS16448 IMU");
+	  NetworkTableEntry value = builder.getEntry("Value");
+	  NetworkTableEntry pitch = builder.getEntry("Pitch");
+	  NetworkTableEntry roll = builder.getEntry("Roll");
+	  NetworkTableEntry yaw = builder.getEntry("Yaw");
+	  NetworkTableEntry accelX = builder.getEntry("AccelX");
+	  NetworkTableEntry accelY = builder.getEntry("AccelY");
+	  NetworkTableEntry accelZ = builder.getEntry("AccelZ");
+	  NetworkTableEntry angleX = builder.getEntry("AngleX");
+	  NetworkTableEntry angleY = builder.getEntry("AngleY");
+	  NetworkTableEntry angleZ = builder.getEntry("AngleZ");
+
+	  class UpdateTable implements Runnable {
+		  public void run() {			  
+			  value.setDouble(getAngle());
+			  pitch.setDouble(getPitch());
+			  roll.setDouble(getRoll());
+			  yaw.setDouble(getYaw());
+			  accelX.setDouble(getAccelX());
+			  accelY.setDouble(getAccelY());
+			  accelZ.setDouble(getAccelZ());
+			  angleX.setDouble(getAngleX());
+			  angleY.setDouble(getAngleY());
+			  angleZ.setDouble(getAngleZ());
+		  }
+	  }	  
+	  builder.setUpdateTable(new UpdateTable());
   }
 }
