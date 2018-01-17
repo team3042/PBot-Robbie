@@ -19,6 +19,7 @@ public class SpinnerEncoder extends Subsystem {
 	private static final int COUNTS_PER_REV = RobotMap.SPINNER_ENCODER_COUNTS_PER_REV;
 	private static final int TIMEOUT = RobotMap.SPINNER_TIMEOUT;
 	private static final int PIDIDX = RobotMap.SPINNER_PIDIDX;
+	private static final boolean SENSOR_PHASE = RobotMap.SPINNER_SENSOR_PHASE;
 
 	
 	/** Instance Variables ****************************************************/
@@ -37,6 +38,7 @@ public class SpinnerEncoder extends Subsystem {
 				PIDIDX, TIMEOUT);
 		encoder.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 
 				FRAME_RATE, TIMEOUT);
+		encoder.setSensorPhase(SENSOR_PHASE); 	// affects closed-loop mode
 		
 		reset();
 	}

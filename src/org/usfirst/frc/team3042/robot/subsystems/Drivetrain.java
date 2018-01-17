@@ -24,10 +24,7 @@ public class Drivetrain extends Subsystem {
 	private static final boolean HAS_AUTON = RobotMap.HAS_AUTON;
 	private static final NeutralMode BRAKE_MODE = RobotMap.DRIVETRAIN_BRAKE_MODE;
 	private static final boolean REVERSE_LEFT_MOTOR = RobotMap.REVERSE_LEFT_MOTOR;
-	private static final boolean REVERSE_RIGHT_MOTOR = RobotMap.REVERSE_RIGHT_MOTOR;
-	private static final boolean SENSOR_PHASE_LEFT = RobotMap.SENSOR_PHASE_LEFT;
-	private static final boolean SENSOR_PHASE_RIGHT = RobotMap.SENSOR_PHASE_RIGHT;
-	
+	private static final boolean REVERSE_RIGHT_MOTOR = RobotMap.REVERSE_RIGHT_MOTOR;	
 	
 	
 	/** Instance Variables ****************************************************/
@@ -53,13 +50,12 @@ public class Drivetrain extends Subsystem {
 					new DrivetrainAuton(leftMotor, rightMotor, encoders);
 		}
 		
-		initMotor(leftMotor, REVERSE_LEFT_MOTOR, SENSOR_PHASE_LEFT);
-		initMotor(rightMotor, REVERSE_RIGHT_MOTOR, SENSOR_PHASE_RIGHT);
+		initMotor(leftMotor, REVERSE_LEFT_MOTOR);
+		initMotor(rightMotor, REVERSE_RIGHT_MOTOR);
 	}
-	private void initMotor(TalonSRX motor, boolean reverse, boolean sensorPhase) {
+	private void initMotor(TalonSRX motor, boolean reverse) {
 		motor.setNeutralMode(BRAKE_MODE);
 		motor.setInverted(reverse); 	// affects percent Vbus mode
-		motor.setSensorPhase(sensorPhase); 	// affects closed-loop mode
 	}
 	
 	

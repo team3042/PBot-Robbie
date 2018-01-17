@@ -21,6 +21,8 @@ public class DrivetrainEncoders extends Subsystem {
 	private static final int FRAME_RATE = RobotMap.ENCODER_FRAME_RATE;
 	private static final int TIMEOUT = RobotMap.AUTON_TIMEOUT;
 	private static final int PIDIDX = RobotMap.AUTON_PIDIDX;
+	private static final boolean SENSOR_PHASE_LEFT = RobotMap.SENSOR_PHASE_LEFT;
+	private static final boolean SENSOR_PHASE_RIGHT = RobotMap.SENSOR_PHASE_RIGHT;
 
 	
 	/** Instance Variables ****************************************************/
@@ -36,16 +38,17 @@ public class DrivetrainEncoders extends Subsystem {
 		leftEncoder = leftMotor;
 		rightEncoder = rightMotor;
 				
-		initEncoder(leftEncoder);
-		initEncoder(rightEncoder);
+		initEncoder(leftEncoder, SENSOR_PHASE_LEFT);
+		initEncoder(rightEncoder, SENSOR_PHASE_RIGHT);
 													
 		reset();
 	}
-	private void initEncoder(TalonSRX encoder) {
+	private void initEncoder(TalonSRX encoder, boolean sensorPhase) {
 		encoder.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 
 				PIDIDX, TIMEOUT);
 		encoder.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 
 				FRAME_RATE, TIMEOUT);
+		encoder.setSensorPhase(sensorPhase); 	// affects closed-loop mode
 	}
 	
 	

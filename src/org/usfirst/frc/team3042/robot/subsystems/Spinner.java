@@ -41,7 +41,6 @@ public class Spinner extends Subsystem {
 		
 		motor.setNeutralMode(BRAKE_MODE);
 		motor.setInverted(REVERSE_SPINNER); 	// affects percent Vbus mode
-		motor.setSensorPhase(REVERSE_SPINNER); 	// affects closed-loop mode
 	}
 	
 	

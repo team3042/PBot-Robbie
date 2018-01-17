@@ -65,8 +65,6 @@ public class RobotMap {
 	public static final NeutralMode DRIVETRAIN_BRAKE_MODE = NeutralMode.Brake;
 	public static final boolean REVERSE_LEFT_MOTOR = 	(IS_PBOT) ? true : false;
 	public static final boolean REVERSE_RIGHT_MOTOR = 	(IS_PBOT) ? false: false;
-	public static final boolean SENSOR_PHASE_LEFT = 	(IS_PBOT) ? false: false;
-	public static final boolean SENSOR_PHASE_RIGHT = 	(IS_PBOT) ? false: false;
 	// Maximum Acceleration given in power per second
 	public static final double ACCELERATION_MAX = 1.5;
 	public static final double kF_DRIVE_LEFT = 	(IS_PBOT) 		? 1.02 :
@@ -82,6 +80,8 @@ public class RobotMap {
 	public static final int COUNTS_PER_REVOLUTION = 1440;
 	//How often the encoders update on the CAN, in milliseconds
 	public static final int ENCODER_FRAME_RATE = 10;
+	public static final boolean SENSOR_PHASE_LEFT = 	(IS_PBOT) ? false: false;
+	public static final boolean SENSOR_PHASE_RIGHT = 	(IS_PBOT) ? false: false;
 	
 	
 	/** Drivetrain Autonomous Settings ****************************************/
@@ -132,6 +132,7 @@ public class RobotMap {
 	public static final int SPINNER_ENCODER_FRAME_RATE = 10;
 	public static final int SPINNER_ENCODER_COUNTS_PER_REV = 4096;
 	public static final boolean REVERSE_SPINNER_ENCODER = false;
+	public static final boolean SPINNER_SENSOR_PHASE = false;
 	
 	
 	/** Spinner Closed-Loop Settings ******************************************/
