@@ -47,10 +47,10 @@ public class Path {
 	
 	/** Add Turn **************************************************************
 	 * angle: degrees
-	 * radius: number of robot widths for turn radius of the outer wheel
-	 * 			0.5 would mean turn in place
-	 * 			1.0 would mean turn around one side
-	 * speed: physical unit of distance per second
+	 * radius: inches
+	 * 		If You want to turn in place, use a radius that is 0.5 times the 
+	 * 		robot width. If you want to turn around one side of the robot, use
+	 * 		a radius that is 1.0 times the width of the robot.
 	 * 
 	 * The speed is the speed of the outer wheel.
 	 * 
@@ -58,7 +58,6 @@ public class Path {
 	 * Direction is determined by the sign of speed.
 	 */
 	public void addLeftTurn(double angle, double radius, double speed) {
-		radius = convertRadius(radius);
 		double distance = convertDistance(angle, radius);
 		speed = convertSpeed(speed);
 		
@@ -70,7 +69,6 @@ public class Path {
 		rightSpeed.add(speed);
 	}
 	public void addRightTurn(double angle, double radius, double speed) {
-		radius = convertRadius(radius);
 		double distance = convertDistance(angle, radius);
 		speed = convertSpeed(speed);
 		
@@ -80,10 +78,6 @@ public class Path {
 		leftSpeed.add(speed);
 		rightDistance.add(distance * Math.abs(innerScale));
 		rightSpeed.add(speed * innerScale);
-	}
-	private double convertRadius(double radius) {
-		radius *= ROBOT_WIDTH;
-		return radius;
 	}
 	private double convertDistance(double angle, double radius) {
 		angle *= Math.PI / 180.0; //convert to radians

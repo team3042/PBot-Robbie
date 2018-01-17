@@ -77,7 +77,7 @@ public class SpinnerClosedLoop extends Subsystem {
 		motor.set(ControlMode.Velocity, cp100ms);
 	}
 	public void setPosition(double position) {
-		position += encoder.getPositionZero();
+		position += encoder.getPositionZero();		
 		
 		double counts = position * COUNTS_PER_REV;
 				

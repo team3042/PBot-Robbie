@@ -23,7 +23,7 @@ public class RobotMap {
 	 * in inches, position will be in inches and speed in inches per second.
 	 */
 	public static final double WHEEL_DIAMETER = 4.0;
-	public static final double ROBOT_WIDTH = (IS_PBOT) ? 20.2 : 0.0;
+	public static final double ROBOT_WIDTH = (IS_PBOT) ? 15.0 : 0.0;
 	
 	
 	/** USB ports *************************************************************/					
@@ -65,6 +65,8 @@ public class RobotMap {
 	public static final NeutralMode DRIVETRAIN_BRAKE_MODE = NeutralMode.Brake;
 	public static final boolean REVERSE_LEFT_MOTOR = 	(IS_PBOT) ? true : false;
 	public static final boolean REVERSE_RIGHT_MOTOR = 	(IS_PBOT) ? false: false;
+	public static final boolean SENSOR_PHASE_LEFT = 	(IS_PBOT) ? false: false;
+	public static final boolean SENSOR_PHASE_RIGHT = 	(IS_PBOT) ? false: false;
 	// Maximum Acceleration given in power per second
 	public static final double ACCELERATION_MAX = 1.5;
 	public static final double kF_DRIVE_LEFT = 	(IS_PBOT) 		? 1.02 :
@@ -77,7 +79,7 @@ public class RobotMap {
 	public static final boolean HAS_ENCODERS = true;
 	//Encoder counts per revolution
 	//In quadrature mode, actual counts will be 4x this; e.g., 360 -> 1440
-	public static final int COUNTS_PER_REVOLUTION = 360;
+	public static final int COUNTS_PER_REVOLUTION = 1440;
 	//How often the encoders update on the CAN, in milliseconds
 	public static final int ENCODER_FRAME_RATE = 10;
 	
@@ -128,7 +130,7 @@ public class RobotMap {
 	/** Spinner Encoder Settings **********************************************/
 	public static final boolean HAS_SPINNER_ENCODER = HAS_SPINNER;
 	public static final int SPINNER_ENCODER_FRAME_RATE = 10;
-	public static final int SPINNER_ENCODER_COUNTS_PER_REV = 1024;
+	public static final int SPINNER_ENCODER_COUNTS_PER_REV = 4096;
 	public static final boolean REVERSE_SPINNER_ENCODER = false;
 	
 	
@@ -141,10 +143,10 @@ public class RobotMap {
 	public static final double kF_SPINNER_POSITION = 0.0; //Should be set to zero
 	public static final int I_ZONE_SPINNER_POSITION = 0;
 	public static final int SPINNER_SPEED_PROFILE = 1;
-	public static final double kP_SPINNER_SPEED = 0.02;
+	public static final double kP_SPINNER_SPEED = 0.05;
 	public static final double kI_SPINNER_SPEED = 0.0;
-	public static final double kD_SPINNER_SPEED = 0.2;
-	public static final double kF_SPINNER_SPEED = 0.0245;
+	public static final double kD_SPINNER_SPEED = 0.5;
+	public static final double kF_SPINNER_SPEED = 0.036;
 	public static final int I_ZONE_SPINNER_SPEED = 0;
 	public static final double SPINNER_DEFAULT_POSITION = 1.0; //revolutions
 	public static final double SPINNER_DEFAULT_SPEED = 500; //RPM

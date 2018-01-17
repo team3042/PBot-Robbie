@@ -26,7 +26,7 @@ public class DrivetrainEncoders extends Subsystem {
 	/** Instance Variables ****************************************************/
 	Log log = new Log(LOG_LEVEL, getName());
 	TalonSRX leftEncoder, rightEncoder;
-	int leftPositionZero, rightPositionZero;
+	double leftPositionZero, rightPositionZero;
 	
 	
 	/** DrivetrainEncoders ****************************************************/
@@ -59,12 +59,15 @@ public class DrivetrainEncoders extends Subsystem {
 	
 	/** reset *****************************************************************/
 	public void reset() {
-		leftPositionZero = leftEncoder.getSelectedSensorPosition(PIDIDX);
-		rightPositionZero = rightEncoder.getSelectedSensorPosition(PIDIDX);
+		int leftCounts = leftEncoder.getSelectedSensorPosition(PIDIDX);
+		leftPositionZero = countsToRev(leftCounts);
+		
+		int rightCounts = rightEncoder.getSelectedSensorPosition(PIDIDX);
+		rightPositionZero = countsToRev(rightCounts);
 	}
 	public void setToZero() {
-		leftPositionZero = 0;
-		rightPositionZero = 0;
+		leftPositionZero = 0.0;
+		rightPositionZero = 0.0;
 	}
 	
 	
@@ -74,13 +77,11 @@ public class DrivetrainEncoders extends Subsystem {
 	 */
 	public double getLeftPosition() {
 		int counts = leftEncoder.getSelectedSensorPosition(PIDIDX);
-		counts -= leftPositionZero;
-		return countsToRev(counts);
+		return countsToRev(counts) - leftPositionZero;
 	}
 	public double getRightPosition() {
 		int counts = rightEncoder.getSelectedSensorPosition(PIDIDX);
-		counts -= rightPositionZero;
-		return countsToRev(counts);
+		return countsToRev(counts) - rightPositionZero;
 	}
 	private double countsToRev(int counts) {
 		return (double)counts / COUNTS_PER_REVOLUTION;

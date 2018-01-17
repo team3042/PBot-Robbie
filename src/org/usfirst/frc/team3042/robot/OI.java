@@ -29,6 +29,7 @@ public class OI {
 	private static final int JOYSTICK_Y_AXIS = Gamepad.JOY_Y_AXIS;
 	private static final int GAMEPAD_LEFT_TRIGGER = Gamepad.LEFT_TRIGGER;
 	private static final int GAMEPAD_RIGHT_TRIGGER = Gamepad.RIGHT_TRIGGER;
+	private static final double ROBOT_WIDTH = RobotMap.ROBOT_WIDTH;
 	
 	
 	/** Instance Variables ****************************************************/
@@ -76,21 +77,23 @@ public class OI {
 			
 			gamepad.X.whenPressed(new Drivetrain_GyroStraight(48.0, 24.0));
 			
+			double turnRadius = 1.5 * ROBOT_WIDTH;
 			Path testPath = new Path();
 			testPath.addStraight(36.0, 18.0);
-			testPath.addRightTurn(90.0, 1.5, 21.0);
-			testPath.addLeftTurn(120, 1.5, 21.0);
-			testPath.addLeftTurn(120, 1.5, -21.0);
-			testPath.addRightTurn(90.0, 1.5, -21.0);
-			testPath.addStraight(36.0, -18.0);
+			//testPath.addRightTurn(90.0, turnRadius, 21.0);
+			//testPath.addLeftTurn(120, turnRadius, 21.0);
+			//testPath.addLeftTurn(120, turnRadius, -21.0);
+			//testPath.addRightTurn(90.0, turnRadius, -21.0);
+			//testPath.addStraight(36.0, -18.0);
 			gamepad.B.whenPressed(new DrivetrainAuton_Drive(testPath));
 			
+			double turnInPlace = 0.5 * ROBOT_WIDTH;
 			Path testPath2 = new Path();
-			testPath2.addLeftTurn(380.0, 0.5, 21.0);
-			testPath2.addRightTurn(420.0, 0.5, 21.0);
-			//gamepad.Y.whenPressed(new DrivetrainAuton_Drive(testPath2));
+			testPath2.addLeftTurn(380.0, turnInPlace, 21.0);
+			testPath2.addRightTurn(420.0, turnInPlace, 21.0);
+			gamepad.Y.whenPressed(new DrivetrainAuton_Drive(testPath2));
 			
-			gamepad.Y.whenPressed(new Drivetrain_GyroTurn(270.0));
+			//gamepad.Y.whenPressed(new Drivetrain_GyroTurn(270.0));
 		}
 		
 		/** Artemis Controls **************************************************/

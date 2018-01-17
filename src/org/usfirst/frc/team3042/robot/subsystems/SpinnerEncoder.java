@@ -24,7 +24,7 @@ public class SpinnerEncoder extends Subsystem {
 	/** Instance Variables ****************************************************/
 	Log log = new Log(LOG_LEVEL, getName());
 	TalonSRX encoder;
-	int positionZero;
+	double positionZero;
 	
 	
 	/** SpinnerEncoder ********************************************************/
@@ -52,7 +52,8 @@ public class SpinnerEncoder extends Subsystem {
 	
 	/** Reset the encoder zero position ****************************************/
 	public void reset() {
-		positionZero = encoder.getSelectedSensorPosition(PIDIDX);
+		int counts = encoder.getSelectedSensorPosition(PIDIDX);
+		positionZero = countsToRev(counts);
 	}
 	
 	
@@ -61,7 +62,10 @@ public class SpinnerEncoder extends Subsystem {
 	 * Encoder speed returns counts per 100 ms, convert to RPM for output
 	 */
 	public double getPosition() {
-		int counts = encoder.getSelectedSensorPosition(PIDIDX) - positionZero;
+		int counts = encoder.getSelectedSensorPosition(PIDIDX);
+		return countsToRev(counts) - positionZero;
+	}
+	private double countsToRev(int counts) {
 		return (double)counts / COUNTS_PER_REV;
 	}
 	public double getSpeed() {
@@ -69,7 +73,7 @@ public class SpinnerEncoder extends Subsystem {
 		
 		return (double)cp100ms * 10.0 * 60.0 / COUNTS_PER_REV;
 	}
-	public int getPositionZero() {
+	public double getPositionZero() {
 		return positionZero;
 	}
 	
