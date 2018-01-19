@@ -1077,16 +1077,16 @@ public class ADIS16448_IMU extends GyroBase implements Gyro, PIDSource, Sendable
 
   void InitSendable(SendableBuilder builder) {
 	  builder.setSmartDashboardType("ADIS16448 IMU");
-	  NetworkTableEntry value = builder.getEntry("Value");
-	  NetworkTableEntry pitch = builder.getEntry("Pitch");
-	  NetworkTableEntry roll = builder.getEntry("Roll");
-	  NetworkTableEntry yaw = builder.getEntry("Yaw");
-	  NetworkTableEntry accelX = builder.getEntry("AccelX");
-	  NetworkTableEntry accelY = builder.getEntry("AccelY");
-	  NetworkTableEntry accelZ = builder.getEntry("AccelZ");
-	  NetworkTableEntry angleX = builder.getEntry("AngleX");
-	  NetworkTableEntry angleY = builder.getEntry("AngleY");
-	  NetworkTableEntry angleZ = builder.getEntry("AngleZ");
+	  final NetworkTableEntry value = builder.getEntry("Value");
+	  final NetworkTableEntry pitch = builder.getEntry("Pitch");
+	  final NetworkTableEntry roll = builder.getEntry("Roll");
+	  final NetworkTableEntry yaw = builder.getEntry("Yaw");
+	  final NetworkTableEntry accelX = builder.getEntry("AccelX");
+	  final NetworkTableEntry accelY = builder.getEntry("AccelY");
+	  final NetworkTableEntry accelZ = builder.getEntry("AccelZ");
+	  final NetworkTableEntry angleX = builder.getEntry("AngleX");
+	  final NetworkTableEntry angleY = builder.getEntry("AngleY");
+	  final NetworkTableEntry angleZ = builder.getEntry("AngleZ");
 
 	  class UpdateTable implements Runnable {
 		  public void run() {			  
