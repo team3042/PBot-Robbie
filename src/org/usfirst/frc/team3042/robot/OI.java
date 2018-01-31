@@ -3,6 +3,7 @@ package org.usfirst.frc.team3042.robot;
 import org.usfirst.frc.team3042.lib.Log;
 import org.usfirst.frc.team3042.lib.Path;
 import org.usfirst.frc.team3042.robot.commands.DrivetrainAuton_Drive;
+import org.usfirst.frc.team3042.robot.commands.Drivetrain_Calibrate;
 import org.usfirst.frc.team3042.robot.commands.Drivetrain_GyroStraight;
 import org.usfirst.frc.team3042.robot.commands.Drivetrain_GyroTurn;
 import org.usfirst.frc.team3042.robot.commands.LightRing_On;
@@ -75,24 +76,25 @@ public class OI {
 			gamepad.LB.toggleWhenPressed(new Spinner_SetPosition());
 			gamepad.RB.toggleWhenPressed(new Spinner_SetSpeed());
 			
-			gamepad.X.whenPressed(new Drivetrain_GyroStraight(48.0, 24.0));
+			gamepad.X.whenPressed(new Drivetrain_GyroStraight(72.0, 24.0));
 			
 			double turnRadius = 1.5 * ROBOT_WIDTH;
 			Path testPath = new Path();
 			testPath.addStraight(36.0, 18.0);
-			//testPath.addRightTurn(90.0, turnRadius, 21.0);
-			//testPath.addLeftTurn(120, turnRadius, 21.0);
-			//testPath.addLeftTurn(120, turnRadius, -21.0);
-			//testPath.addRightTurn(90.0, turnRadius, -21.0);
-			//testPath.addStraight(36.0, -18.0);
+			testPath.addRightTurn(90.0, turnRadius, 21.0);
+			testPath.addLeftTurn(120, turnRadius, 21.0);
+			testPath.addLeftTurn(120, turnRadius, -21.0);
+			testPath.addRightTurn(90.0, turnRadius, -21.0);
+			testPath.addStraight(36.0, -18.0);
 			gamepad.B.whenPressed(new DrivetrainAuton_Drive(testPath));
 			
 			double turnInPlace = 0.5 * ROBOT_WIDTH;
 			Path testPath2 = new Path();
 			testPath2.addLeftTurn(380.0, turnInPlace, 21.0);
 			testPath2.addRightTurn(420.0, turnInPlace, 21.0);
-			gamepad.Y.whenPressed(new DrivetrainAuton_Drive(testPath2));
-			
+			//gamepad.Y.whenPressed(new DrivetrainAuton_Drive(testPath2));
+			gamepad.Y.whenPressed(new Drivetrain_GyroTurn(90.0));
+			//gamepad.Y.whenPressed(new Drivetrain_Calibrate());
 			//gamepad.Y.whenPressed(new Drivetrain_GyroTurn(270.0));
 		}
 		

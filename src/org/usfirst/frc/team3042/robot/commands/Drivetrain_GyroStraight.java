@@ -1,6 +1,7 @@
  package org.usfirst.frc.team3042.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team3042.lib.Log;
 import org.usfirst.frc.team3042.robot.Robot;
@@ -78,9 +79,9 @@ public class Drivetrain_GyroStraight extends Command {
 		integralError += error;
 		double deltaError = error - lastError;
 		
-		double Pterm = kP * error;
-		double Iterm = kI * integralError;
-		double Dterm = kD * deltaError;
+		double Pterm = SmartDashboard.getNumber("Gyro P", kP) * error;
+		double Iterm = SmartDashboard.getNumber("Gyro I", kI) * integralError;
+		double Dterm = SmartDashboard.getNumber("Gyro D", kD) * deltaError;
 		
 		double correction = Pterm + Iterm + Dterm;
 		correction = Math.min(MAX_CORRECTION, correction);

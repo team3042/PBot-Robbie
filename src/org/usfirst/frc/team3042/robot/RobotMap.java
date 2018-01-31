@@ -67,9 +67,9 @@ public class RobotMap {
 	public static final boolean REVERSE_RIGHT_MOTOR = 	(IS_PBOT) ? false: false;
 	// Maximum Acceleration given in power per second
 	public static final double ACCELERATION_MAX = 1.5;
-	public static final double kF_DRIVE_LEFT = 	(IS_PBOT) 		? 1.02 :
+	public static final double kF_DRIVE_LEFT = 	(IS_PBOT) 		?  0.1817180616740088 :
 												(IS_ARTEMIS) 	? 0.0 : 0.0;
-	public static final double kF_DRIVE_RIGHT = (IS_PBOT) 		? 0.774 :
+	public static final double kF_DRIVE_RIGHT = (IS_PBOT) 		?  0.16686239968682717 :
 												(IS_ARTEMIS) 	? 0.0 : 0.0;
 	
 	
@@ -96,27 +96,27 @@ public class RobotMap {
 	public static final int I_ZONE_AUTON =		(IS_PBOT)		? 0 :
 												(IS_ARTEMIS)	? 0 : 0;
 	//The rate of pushing motion profile points to the talon, in ms
-	public static final int AUTON_FRAME_RATE = 5;
+	public static final int AUTON_FRAME_RATE = 10;
 	//Parameters for calibrating the F-gain
-	public static final double AUTON_CALIBRATE_POWER = 0.2;
+	public static final double AUTON_CALIBRATE_POWER = 0.5;
 	public static final double AUTON_CALIBRATE_TIME = 5.0; //seconds
 	public static final int AUTON_COUNT_AVERAGE = 20;
 	//Parameters for motion profile driving
-	public static final int AUTON_DT_MS = 10;
+	public static final int AUTON_DT_MS = 30;
 	public static final double AUTON_DT_SEC = (double)AUTON_DT_MS / 1000.0;
-	public static final double AUTON_ACCEL_TIME = 0.5; //time in sec
+	public static final double AUTON_ACCEL_TIME = 1.0; //time in sec
 	public static final double AUTON_SMOOTH_TIME = 0.1; //time in sec
 	public static final double AUTON_MAX_ACCEL = 3.0; //rev per sec per sec
-	public static final int AUTON_BUFFER_TRIGGER = 5;
+	public static final int AUTON_BUFFER_TRIGGER = 10;
 	public static final int AUTON_TIMEOUT = 0; // timeout in ms; set to zero
 	public static final int AUTON_PIDIDX = 0; // used for cascading PID; set to zero
 	public static final int AUTON_HEADING = 0; //unimplemented feature; set to zero
 	
 	
 	/** Drivetrain Gyro Drive Settings ****************************************/
-	public static final double kP_GYRO = 0.055;
+	public static final double kP_GYRO = 0.01;
 	public static final double kI_GYRO = 0.0;
-	public static final double kD_GYRO = 0.11;
+	public static final double kD_GYRO = 0.05;
 	public static final double ANGLE_TOLERANCE = 2.0;
 	public static final double MAX_SPEED_GYRO = 0.4;
 	

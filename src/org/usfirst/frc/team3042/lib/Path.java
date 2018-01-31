@@ -36,10 +36,20 @@ public class Path {
 		leftSpeed.add(speed);
 		rightSpeed.add(speed);
 	}
+	/**
+	 * 
+	 * @param distance
+	 * @return revolutions
+	 */
 	private double convertDistance(double distance) {
 		distance = Math.abs(distance);
 		return distance / CIRCUMFRENCE;
 	}
+	/**
+	 * 
+	 * @param speed
+	 * @return revolutions per second
+	 */
 	private double convertSpeed(double speed) {
 		return speed / CIRCUMFRENCE;
 	}

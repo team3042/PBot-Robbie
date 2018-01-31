@@ -1,5 +1,6 @@
 package org.usfirst.frc.team3042.robot;
 
+import org.usfirst.frc.team3042.lib.I2CRangeSensor;
 import org.usfirst.frc.team3042.lib.Log;
 import org.usfirst.frc.team3042.robot.commands.ExampleCommand;
 import org.usfirst.frc.team3042.robot.subsystems.Drivetrain;
@@ -9,6 +10,7 @@ import org.usfirst.frc.team3042.robot.subsystems.LightRing;
 import org.usfirst.frc.team3042.robot.subsystems.PanTilt;
 import org.usfirst.frc.team3042.robot.subsystems.Spinner;
 
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -42,6 +44,7 @@ public class Robot extends IterativeRobot {
 	public static final LightRing 	lightRing 	= (HAS_LIGHT_RING) 	? new LightRing() 	: null;
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	public static OI oi;
+	public I2CRangeSensor range = new I2CRangeSensor(I2C.Port.kOnboard);
 
 	Command autonomousCommand;
 	SendableChooser<Command> chooser = new SendableChooser<Command>();
@@ -58,6 +61,10 @@ public class Robot extends IterativeRobot {
 		chooser.addDefault("Default Auto", new ExampleCommand());
 		chooser.addObject("My Auto", new ExampleCommand());
 		SmartDashboard.putData("Auto Mode", chooser);
+		
+		SmartDashboard.putNumber("Gyro P", RobotMap.kP_GYRO);
+		SmartDashboard.putNumber("Gyro I", RobotMap.kI_GYRO);
+		SmartDashboard.putNumber("Gyro D", RobotMap.kD_GYRO);
 	}
 
 	
@@ -121,6 +128,9 @@ public class Robot extends IterativeRobot {
 	 */
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+		
+		SmartDashboard.putNumber("I2C ValueOptical", range.readOptical());
+		SmartDashboard.putNumber("I2C ValueUltralsonic", range.readUltrasonic());
 	}
 
 	
