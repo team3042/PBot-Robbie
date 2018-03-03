@@ -151,11 +151,13 @@ public class RobotMap {
 	public static final int I_ZONE_SPINNER_SPEED = 0;
 	public static final double SPINNER_DEFAULT_POSITION = 1.0; //revolutions
 	public static final double SPINNER_DEFAULT_SPEED = 500; //RPM
-	public static final double SPINNER_CALIBRATE_POWER = 0.1;
+	public static final double SPINNER_CALIBRATE_POWER = 0.2;
 	public static final double SPINNER_CALIBRATE_TIME = 10.0; //seconds
 	public static final int SPINNER_COUNT_AVERAGE = 20;
 	public static final int SPINNER_TIMEOUT = 0; // timeout in ms; set to zero
 	public static final int SPINNER_PIDIDX = 0; // used for cascading PID; set to zero
+	public static final int SPINNER_CRUISE = 500; //RPM
+	public static final int SPINNER_ACCEL = 500; //RPM per sec
 	
 	
 	/** PanTilt Settings ******************************************************/

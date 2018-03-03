@@ -28,6 +28,8 @@ public class SpinnerClosedLoop extends Subsystem {
 	private static final double COUNTS_PER_REV = RobotMap.SPINNER_ENCODER_COUNTS_PER_REV;
 	private static final int TIMEOUT = RobotMap.SPINNER_TIMEOUT;
 	private static final int PIDIDX = RobotMap.SPINNER_PIDIDX;
+	private static final int CRUISE = RobotMap.SPINNER_CRUISE;
+	private static final int ACCEL = RobotMap.SPINNER_ACCEL;
 	
 	/** Instance Variables ****************************************************/
 	Log log = new Log(LOG_LEVEL, getName());
@@ -68,20 +70,40 @@ public class SpinnerClosedLoop extends Subsystem {
 	 * Input units for speed is RPM, convert to counts per 100ms for talon
 	 * Input units for Position is revolutions, convert to counts for talon
 	 */
-	public void setSpeed(double speed){
-		log.add("Speed", speed, LOG_LEVEL);
+	public void setSpeed(double rpm){
+		log.add("Speed", rpm, LOG_LEVEL);
 		
-		double cp100ms = speed * (double)COUNTS_PER_REV / 600.0;
+		double cp100ms = rpmToCp100ms(rpm);
 				
 		motor.selectProfileSlot(SPEED_PROFILE, PIDIDX);
 		motor.set(ControlMode.Velocity, cp100ms);
 	}
-	public void setPosition(double position) {
-		position += encoder.getPositionZero();		
-		
-		double counts = position * COUNTS_PER_REV;
+	public void setPosition(double position) {		
+		double counts = positionToCounts(position);
 				
 		motor.selectProfileSlot(POSITION_PROFILE, PIDIDX);
 		motor.set(ControlMode.Position, counts);
+	}
+	public void setMagicPosition(double position) {
+		double counts = positionToCounts(position);
+		
+		double cp100ms = rpmToCp100ms(CRUISE);
+		double accel = rpmToCp100ms(ACCEL);
+		
+		motor.selectProfileSlot(POSITION_PROFILE, PIDIDX);
+		motor.configMotionCruiseVelocity((int)cp100ms, TIMEOUT);
+		motor.configMotionAcceleration((int)accel, TIMEOUT);
+		motor.set(ControlMode.MotionMagic, counts);		
+	}
+	
+	
+	private double positionToCounts(double position) {
+		position += encoder.getPositionZero();
+		double counts = position * COUNTS_PER_REV;
+		return counts;
+	}
+	private double rpmToCp100ms(double rpm) {
+		double cp100ms = rpm * (double)COUNTS_PER_REV / 600.0;
+		return cp100ms;
 	}
 }

@@ -52,7 +52,7 @@ public class Spinner_SetPosition extends Command {
 			position = SmartDashboard.getNumber(positionLabel, DEFAULT_POSITION);
 		}
 		
-		spinner.closedLoop.setPosition(position);
+		spinner.closedLoop.setMagicPosition(position);
 	}
 
 	
